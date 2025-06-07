@@ -1,4 +1,4 @@
-import * as Nimiq from '@nimiq/core'
+// import * as Nimiq from '@nimiq/core'
 
 async function main() {
   console.log('🚀 Starting Nimiq Web Client Tutorial')
