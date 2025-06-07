@@ -1,0 +1,175 @@
+/* Import Nimiq CSS Design System */
+@import './node_modules/nimiq-css/dist/css/colors.css';
+@import './node_modules/nimiq-css/dist/css/fonts.css';
+
+/* TutorialKit Theme using Nimiq Design System */
+:root,
+:root[data-theme='light'] {
+  /* High-level app styling */
+  --tk-elements-app-textColor: var(--colors-neutral);
+  --tk-elements-app-backgroundColor: var(--colors-neutral-0);
+  --tk-elements-app-borderColor: var(--colors-neutral-200);
+
+  /* Background tokens */
+  --tk-background-primary: var(--colors-neutral-0);
+  --tk-background-secondary: var(--colors-neutral-50);
+  --tk-background-active: var(--colors-neutral-100);
+  --tk-background-active-secondary: var(--colors-neutral-0);
+  --tk-background-brighter: var(--colors-neutral-0);
+  --tk-background-accent: var(--colors-blue);
+  --tk-background-accent-secondary: var(--colors-blue);
+  --tk-background-accent-active: var(--colors-blue-600);
+  --tk-background-positive: var(--colors-green-400);
+  --tk-background-warning: var(--colors-orange-400);
+  --tk-background-negative: var(--colors-red-400);
+  --tk-background-info: var(--colors-blue-400);
+  --tk-background-tip: var(--colors-gold-400);
+
+  /* Text tokens */
+  --tk-text-primary: var(--colors-neutral);
+  --tk-text-primary-inverted: var(--colors-neutral-0);
+  --tk-text-secondary: var(--colors-neutral-600);
+  --tk-text-secondary-inverted: var(--colors-neutral-200);
+  --tk-text-disabled: var(--colors-neutral-400);
+  --tk-text-body: var(--colors-neutral-800);
+  --tk-text-heading: var(--colors-neutral);
+  --tk-text-active: var(--colors-neutral);
+  --tk-text-accent: var(--colors-blue);
+  --tk-text-positive: var(--colors-green);
+  --tk-text-warning: var(--colors-orange);
+  --tk-text-negative: var(--colors-red);
+  --tk-text-info: var(--colors-blue);
+  --tk-text-tip: var(--colors-gold);
+
+  /* Border tokens */
+  --tk-border-primary: var(--colors-neutral-200);
+  --tk-border-secondary: var(--colors-neutral-200);
+  --tk-border-brighter: var(--colors-neutral-300);
+  --tk-border-accent: var(--colors-blue);
+  --tk-border-positive: var(--colors-green);
+  --tk-border-warning: var(--colors-orange);
+  --tk-border-negative: var(--colors-red);
+  --tk-border-info: var(--colors-blue);
+  --tk-border-tip: var(--colors-gold);
+
+  /* Top Bar styling with Nimiq branding */
+  --tk-elements-topBar-backgroundColor: var(--colors-neutral-0);
+  --tk-elements-topBar-borderColor: var(--colors-neutral-200);
+  --tk-elements-topBar-textColor: var(--colors-neutral);
+
+  /* Navigation and breadcrumbs */
+  --tk-elements-breadcrumbs-textColor: var(--colors-neutral-600);
+  --tk-elements-breadcrumbs-textColorActive: var(--colors-blue);
+  --tk-elements-breadcrumbs-backgroundColor: var(--colors-neutral-0);
+
+  /* Panel headers */
+  --tk-elements-panel-header-backgroundColor: var(--colors-neutral-50);
+  --tk-elements-panel-header-borderColor: var(--colors-neutral-200);
+  --tk-elements-panel-header-textColor: var(--colors-neutral);
+
+  /* Editor styling */
+  --tk-elements-editor-textColor: var(--colors-neutral);
+  --tk-elements-editor-backgroundColor: var(--colors-neutral-0);
+  --tk-elements-editor-activeLineBackgroundColor: var(--colors-neutral-50);
+  --tk-elements-editor-cursorColor: var(--colors-blue);
+  --tk-elements-editor-selection-backgroundColor: var(--colors-blue-400);
+  --tk-elements-editor-selection-backgroundOpacity: 0.3;
+
+  /* Terminal colors using Nimiq palette */
+  --tk-terminal-foreground: var(--colors-neutral);
+  --tk-terminal-background: var(--colors-neutral-0);
+  --tk-terminal-selection-background: var(--colors-blue-400);
+  --tk-terminal-blue: var(--colors-blue);
+  --tk-terminal-green: var(--colors-green);
+  --tk-terminal-red: var(--colors-red);
+  --tk-terminal-yellow: var(--colors-orange);
+  --tk-terminal-magenta: var(--colors-purple);
+}
+
+:root[data-theme='dark'] {
+  /* High-level app styling for dark mode */
+  --tk-elements-app-textColor: var(--colors-neutral-0);
+  --tk-elements-app-backgroundColor: var(--colors-darkblue);
+  --tk-elements-app-borderColor: var(--colors-neutral-800);
+
+  /* Background tokens for dark mode */
+  --tk-background-primary: var(--colors-darkblue);
+  --tk-background-secondary: var(--colors-neutral-900);
+  --tk-background-active: var(--colors-neutral-800);
+  --tk-background-active-secondary: var(--colors-darkerblue);
+  --tk-background-brighter: var(--colors-neutral-800);
+  --tk-background-accent: var(--colors-blue);
+  --tk-background-accent-secondary: var(--colors-blue);
+  --tk-background-accent-active: var(--colors-blue-1100);
+
+  /* Text tokens for dark mode */
+  --tk-text-primary: var(--colors-neutral-0);
+  --tk-text-primary-inverted: var(--colors-darkblue);
+  --tk-text-secondary: var(--colors-neutral-400);
+  --tk-text-secondary-inverted: var(--colors-neutral-700);
+  --tk-text-disabled: var(--colors-neutral-600);
+  --tk-text-body: var(--colors-neutral-300);
+  --tk-text-heading: var(--colors-neutral-0);
+  --tk-text-active: var(--colors-neutral-0);
+
+  /* Border tokens for dark mode */
+  --tk-border-primary: var(--colors-neutral-800);
+  --tk-border-secondary: var(--colors-neutral-800);
+  --tk-border-brighter: var(--colors-neutral-700);
+
+  /* Top Bar styling for dark mode */
+  --tk-elements-topBar-backgroundColor: var(--colors-darkblue);
+  --tk-elements-topBar-borderColor: var(--colors-neutral-800);
+  --tk-elements-topBar-textColor: var(--colors-neutral-0);
+
+  /* Editor styling for dark mode */
+  --tk-elements-editor-textColor: var(--colors-neutral-0);
+  --tk-elements-editor-backgroundColor: var(--colors-darkblue);
+  --tk-elements-editor-activeLineBackgroundColor: var(--colors-neutral-900);
+  --tk-elements-editor-cursorColor: var(--colors-blue);
+
+  /* Terminal for dark mode */
+  --tk-terminal-foreground: var(--colors-neutral-0);
+  --tk-terminal-background: var(--colors-darkblue);
+}
+
+/* Custom styling for Nimiq branding touches */
+.tk-topbar {
+  background: var(--colors-neutral-gradient);
+}
+
+/* Ensure the Nimiq logo maintains proper styling */
+.tk-topbar img {
+  height: 32px;
+  width: auto;
+}
+
+/* Add subtle Nimiq-style gradients to accent elements */
+.tk-button-primary,
+.tk-tab-active {
+  background: var(--colors-blue-gradient);
+  border-color: var(--colors-blue);
+}
+
+.tk-button-primary:hover,
+.tk-tab-active:hover {
+  background: var(--colors-blue-gradient-darkened);
+}
+
+/* Style status indicators with Nimiq colors */
+.tk-status-positive {
+  color: var(--colors-green);
+}
+
+.tk-status-negative {
+  color: var(--colors-red);
+}
+
+.tk-status-warning {
+  color: var(--colors-orange);
+}
+
+/* Apply Nimiq typography if available */
+:root {
+  font-family: 'Muli', 'Inter', system-ui, -apple-system, sans-serif;
+} 
