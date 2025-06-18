@@ -1,95 +1,53 @@
-import { Client, ClientConfiguration, KeyPair, Address, Policy } from '@nimiq/core'
-import { Entropy } from '@nimiq/utils'
+import { KeyPair, PrivateKey } from '@nimiq/core'
+import { getClient } from './consensus.js'
+import { requestFromFaucet } from './faucet.js'
 
-console.log('Starting Nimiq client...')
-
-// This is the Testnet Faucet URL
-// You can also access it via browser at https://faucet.pos.nimiq-testnet.com/
-const FAUCET_URL = 'https://faucet.pos.nimiq-testnet.com/tapit'
-
-async function requestFundsFromFaucet(address) {
-  try {
-    const response = await fetch(FAUCET_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ 
-        address: address.toUserFriendlyAddress(),
-        withStackingContract: false
-      })
-    })
-
-    if (!response.ok) {
-      throw new Error(`Faucet request failed: ${response.status}`)
-    }
-
-    const data = await response.json()
-    console.log('💰 Faucet request successful!')
-    return data
-  } catch (error) {
-    console.error('❌ Faucet request failed:', error.message)
-    throw error
-  }
-}
+console.log('🚀 Starting Nimiq client...')
 
 async function main() {
   try {
-      // Create client configuration
-  const config = new ClientConfiguration()
-  // We can also use `MainAlbatross` for mainnet
-  config.network('TestAlbatross')
-
-  // We must explicitly set the seed nodes for testnet
-  config.seedNodes([
-    '/dns4/seed1.pos.nimiq-testnet.com/tcp/8443/wss',
-    '/dns4/seed2.pos.nimiq-testnet.com/tcp/8443/wss',
-    '/dns4/seed3.pos.nimiq-testnet.com/tcp/8443/wss',
-    '/dns4/seed4.pos.nimiq-testnet.com/tcp/8443/wss',
-  ])
+    // Setup consensus
+    const client = await getClient()
     
-    // Connect using pico which is faster
-    // Read more at: https://www.nimiq.com/developers/learn/protocol/sync-protocol/nodes-and-sync
-    config.syncMode('pico')
-    
-    // Print minimal messages
-    config.logLevel('error')
-    
-    // Create the client instance
-    const client = await Client.create(config.build())
-    console.log('Client created, waiting for consensus...')
-    
-    // Wait for consensus
-    await client.waitForConsensusEstablished()
-    console.log('✅ Consensus established!')
-    
-    // Generate a new wallet
-    const entropy = Entropy.generate()
-    const wallet = {
-      keyPair: KeyPair.derive(entropy),
-      address: Address.derive(entropy)
-    }
-    
+    // Generate a new wallet 🔐
+    const privateKey = PrivateKey.generate()
+    const keyPair = KeyPair.derive(privateKey)
+      
+    // Display the wallet information 
     console.log('🎉 Wallet created successfully!')
-    console.log('Address:', wallet.address.toUserFriendlyAddress())
     
-    // Check initial balance
-    let balance = await client.getBalance(wallet.address)
-    console.log('Initial Balance:', Policy.lunasToCoins(balance), 'NIM')
+    const address = keyPair.toAddress()
+    console.log('📍 Address:', address.toUserFriendlyAddress())
+    console.log('🔐 Public Key:', keyPair.publicKey.toHex())
+
+    // Check wallet balance 💰
+    const account = await client.getAccount(address.toUserFriendlyAddress());  
+    console.log('📊 Account:', account)  
+    
+    // Convert lunas to NIM. In this case, the balance is always 0 since we just created the wallet.
+    const nim = account.balance / 1e5
+    console.log(`💰 Initial Balance: ${nim} NIM`)
     
     // Request funds from faucet
-    console.log('💧 Requesting funds from faucet...')
-    await requestFundsFromFaucet(wallet.address)
+    await requestFromFaucet(client, address)
     
-    // Wait a bit for the transaction to be processed
-    await new Promise(resolve => setTimeout(resolve, 5000))
+    // Wait for funds to arrive
+    console.log('⏳ Waiting for transaction to be processed...')
+    await new Promise(resolve => setTimeout(resolve, 3000))
     
     // Check balance again
-    balance = await client.getBalance(wallet.address)
-    console.log('New Balance:', Policy.lunasToCoins(balance), 'NIM')
+    const updatedAccount = await client.getAccount(address.toUserFriendlyAddress())
+    const updatedNim = updatedAccount.balance / 1e5
+    console.log(`💰 Updated Balance: ${updatedNim} NIM`)
+    
+    if (updatedAccount.balance > 0) {
+      console.log('✅ Funds received successfully!')
+    } else {
+      console.log('⏳ No funds received yet. Faucet transaction might still be processing.')
+    }
     
   } catch (error) {
-    console.error('Error:', error)
+    console.error('❌ Error:', error.message)
   }
 }
 

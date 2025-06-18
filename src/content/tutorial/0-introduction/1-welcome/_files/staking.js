@@ -54,7 +54,7 @@ async function main() {
   
   // Wait for funds to arrive
   console.log('⏳ Waiting for funds...')
-  await new Promise(resolve => setTimeout(resolve, 10000))
+  await new Promise(resolve => setTimeout(resolve, 3000))
   
   const balance = await client.getBalance(address)
   console.log('💰 Balance:', Policy.lunasToCoins(balance), 'NIM')

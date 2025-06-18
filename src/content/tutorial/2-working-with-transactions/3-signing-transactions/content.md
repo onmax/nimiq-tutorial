@@ -8,105 +8,140 @@ terminal:
 
 # Creating and Signing Transactions
 
-Now that we have a funded wallet, let's learn how to create, sign, and send transactions. This is the core functionality for transferring NIM between addresses.
+In this lesson, we'll learn how to create, sign, and send transactions on the Nimiq network. We'll build upon the concepts from previous lessons to implement a complete transaction flow.
 
-## Understanding Transactions
+## What We'll Build
 
-- A **transaction** represents a transfer of value from one address to another
-- **Signing** a transaction proves that you own the private key associated with the sender address
-- **There are no fees** like other chains
-- Transactions must be signed before they can be sent to the network
+We're going to create a complete transaction example that:
+1. Uses a pre-funded wallet (since the faucet is temporarily unavailable)
+2. Reads the account balance and transaction history
+3. Creates two different types of transactions
+4. Signs and sends both transactions to the network
+
+## Learning Objectives
+
+By the end of this lesson, you'll be able to:
+- Read account balances and transaction history
+- Create basic transactions for simple value transfers
+- Create extended transactions with custom data messages
+- Sign transactions using your private key
+- Send transactions to the Nimiq network
+- Understand the difference between basic and extended transactions
+
+## Understanding Transaction Types
+
+### Basic Transactions
+Basic transactions are the simplest way to transfer value:
+- Transfer NIM from one address to another
+- Minimal data overhead
+- Most common transaction type
+- Perfect for simple payments
+
+### Extended Transactions with Data
+Extended transactions can include custom data:
+- Include arbitrary data (up to 64 bytes)
+- Perfect for messages, metadata, or application-specific information
+- Slightly larger but still efficient
+- Great for adding context to payments
 
 ## Transaction Components
 
-Every transaction has these key components:
-- **Sender**: The address sending the funds (your wallet)
-- **Recipient**: The address receiving the funds
-- **Value**: The amount to send (in Luna, the smallest unit)
-- **Fee**: The transaction fee (in Luna)
-- **Validity Start Height**: The block height from which the transaction is valid
+Every Nimiq transaction requires these components:
 
-## Creating Your First Transaction
+- **Sender**: Your wallet address (where funds come from)
+- **Recipient**: Destination address (where funds go to)
+- **Value**: Amount to send in Luna (Nimiq's smallest unit, 1 NIM = 100,000 Luna)
+- **Fee**: Transaction fee (currently 0 in Nimiq!)
+- **Valid Start Height**: Block height from which the transaction becomes valid
+- **Network ID**: Identifies the network (TestAlbatross for our tutorial)
+- **Data**: Optional message for extended transactions
 
-Looking at the `index.js` file, we have our wallet setup and faucet request from previous lessons. Now we'll add transaction functionality.
+## Current Setup Notes
 
-## Step 1: Create a Recipient Address
+**Important**: We're currently using a pre-funded private key instead of the faucet because the faucet service is temporarily unavailable. In a real application, you would:
 
-First, let's create a recipient address to send funds to. Add this code after receiving faucet funds:
+1. Generate a fresh private key with `PrivateKey.generate()`
+2. Request funds from the faucet
+3. Proceed with transactions
 
+For this tutorial, we're using a specific private key that already has funds on the test network.
+
+## The Complete Flow
+
+Here's what our implementation will do:
+
+1. **Setup Connection**: Connect to the Nimiq network
+2. **Create Wallet**: Use our pre-funded private key to create a wallet
+3. **Check Balance**: Read the current account balance
+4. **Find Transaction History**: Look at past transactions to find a recipient
+5. **Create Basic Transaction**: Send half the funds using a basic transaction
+6. **Create Extended Transaction**: Send the other half with a custom message
+7. **Sign Both**: Use our private key to sign both transactions
+8. **Send to Network**: Broadcast both transactions
+
+## Step-by-Step Implementation
+
+Looking at the code, you'll need to uncomment and complete each section:
+
+### 1. Read Account Balance
 ```js
-// Create a recipient address (another test wallet)
-const recipientEntropy = Entropy.generate()
-const recipientAddress = Nimiq.Address.derive(recipientEntropy)
-console.log('📧 Recipient address:', recipientAddress.toUserFriendlyAddress())
+const account = await client.getAccount(address.toUserFriendlyAddress())
+console.log('💰 Current balance:', account.balance / 1e5, 'NIM')
 ```
 
-## Step 2: Get Current Block Height
-
-We need the current block height to set the validity start height for our transaction. Add this code:
-
+### 2. Get Transaction History
 ```js
-// Get current block height
-const currentHeight = await client.getBlockNumber()
-console.log('📊 Current block height:', currentHeight)
+const txHistory = await client.getTransactionsByAddress(address)
+// Find a transaction from someone else to use as recipient
 ```
 
-## Step 3: Create the Transaction
-
-Now let's create a transaction to send 1 NIM to the recipient. Add this code:
-
+### 3. Create Basic Transaction
 ```js
-// Create a transaction
-const transaction = new Nimiq.Transaction(
-  wallet.address,               // sender
-  recipientAddress,             // recipient  
-  Nimiq.Policy.coinsToLunas(1), // value (1 NIM in Luna)
-  0,                            // No fees!
-  currentHeight,                // validity start height
-  Nimiq.Transaction.Type.BASIC  // transaction type
+const basicTx = TransactionBuilder.newBasic(
+  address,           // sender
+  faucetAddress,     // recipient  
+  BigInt(halfAmount), // value
+  0n,                // fee
+  headBlock.height,   // validity start height
+  networkId          // network ID
 )
-
-console.log('📝 Transaction created:')
-console.log('  From:', transaction.sender.toUserFriendlyAddress())
-console.log('  To:', transaction.recipient.toUserFriendlyAddress())
-console.log('  Amount:', Nimiq.Policy.lunasToCoins(transaction.value), 'NIM')
-console.log('  Fee:', Nimiq.Policy.lunasToCoins(transaction.fee), 'NIM')
 ```
 
-## Step 4: Sign the Transaction
-
-Now we need to sign the transaction with our private key. Add this code:
-
+### 4. Create Extended Transaction with Data
 ```js
-// Sign the transaction
-const signature = Nimiq.Signature.create(wallet.keyPair.privateKey, wallet.keyPair.publicKey, transaction.serializeContent())
-const signedTransaction = new Nimiq.SignedTransaction(transaction, signature)
+const message = "Nimiq is awesome!"
+const messageBytes = new TextEncoder().encode(message)
 
-console.log('✅ Transaction signed!')
-console.log('Signature:', signature.toHex())
+const extendedTx = TransactionBuilder.newBasicWithData(
+  address,           // sender
+  faucetAddress,     // recipient
+  messageBytes,      // data
+  BigInt(halfAmount), // value
+  0n,                // fee
+  headBlock.height,   // validity start height
+  networkId          // network ID
+)
 ```
 
-## Step 5: Verify the Signature
-
-Let's verify that our signature is valid before sending. Add this code:
-
+### 5. Sign and Send
 ```js
-// Verify the signature
-const isValid = signedTransaction.verify()
-console.log('🔐 Signature valid:', isValid)
+basicTx.sign(keyPair)
+const basicTxHash = await client.sendTransaction(basicTx)
+
+extendedTx.sign(keyPair)
+const extendedTxHash = await client.sendTransaction(extendedTx)
 ```
 
-## Understanding the Process
+## Key Concepts to Remember
 
-When you run this code, you'll see:
-1. A recipient address is generated
-2. The current block height is retrieved
-3. A transaction is created with all necessary details
-4. The transaction is signed with your private key
-5. The signature is verified to ensure it's correct
+- **Luna vs NIM**: Balances are returned in Luna (1 NIM = 100,000 Luna)
+- **BigInt**: Transaction values must be BigInt for precise arithmetic
+- **Zero Fees**: Nimiq currently has zero transaction fees
+- **Signing**: Transactions must be signed with your private key before sending
+- **Network ID**: Ensures transactions are only valid on the intended network
 
-## What's Next?
+## Ready to Code?
 
-In the next lesson, we'll learn how to send this signed transaction to the network and watch for confirmation!
+The `index.js` file contains the complete skeleton with TODO comments. Simply uncomment each section as you work through the implementation. Each TODO represents a logical step in the transaction creation process.
 
-💡 **Note**: We're creating the recipient address randomly for demonstration. In a real application, you would use an existing address where you want to send funds. 
+💡 **Pro Tip**: The example sends funds back to the original sender (found in transaction history) to demonstrate the complete cycle, but you can send to any valid Nimiq address!

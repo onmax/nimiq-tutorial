@@ -46,7 +46,7 @@ import {
 ### Faucet Utilities (`faucet.js`)
 
 - **`requestFromFaucet(address)`** - Request testnet funds
-- **`waitForFaucetFunds(client, address, waitTime)`** - Wait for funds and check balance
+- **`waitForFaucetFunds(client, address, 3_000)`** - Wait for funds and check balance
 
 ### Staking Utilities (`staking.js`)
 

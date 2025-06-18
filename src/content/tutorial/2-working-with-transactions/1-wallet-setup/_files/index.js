@@ -1,45 +1,35 @@
-import { Client, ClientConfiguration, KeyPair, Address, Policy } from '@nimiq/core'
-import { Entropy } from '@nimiq/utils'
+import { KeyPair, Policy, PrivateKey } from '@nimiq/core'
+import { getClient } from './consensus.js'
 
-console.log('Starting Nimiq client...')
 
 async function main() {
-  try {
-    // Create client configuration
-    const config = new ClientConfiguration()
-    // We can also use `MainAlbatross` for mainnet
-    config.network('TestAlbatross')
+  console.log('🚀 Starting Nimiq client...')
 
-    // We must explicitly set the seed nodes for testnet
-    config.seedNodes([
-      '/dns4/seed1.pos.nimiq-testnet.com/tcp/8443/wss',
-      '/dns4/seed2.pos.nimiq-testnet.com/tcp/8443/wss',
-      '/dns4/seed3.pos.nimiq-testnet.com/tcp/8443/wss',
-      '/dns4/seed4.pos.nimiq-testnet.com/tcp/8443/wss',
-    ])
-    
-    // Connect using pico which is faster
-    // Read more at: https://www.nimiq.com/developers/learn/protocol/sync-protocol/nodes-and-sync
-    config.syncMode('pico')
-    
-    // Print minimal messages
-    config.logLevel('error')
-    
-    // Create the client instance
-    const client = await Client.create(config.build())
-    console.log('Client created, waiting for consensus...')
-    
-    // Wait for consensus
-    await client.waitForConsensusEstablished()
-    console.log('✅ Consensus established!')
-    
-    // TODO: Generate a new wallet
-    // TODO: Display the wallet information 
-    // TODO: Check the wallet balance
-    
-  } catch (error) {
-    console.error('Error:', error)
-  }
+  // Setup consensus (moved to separate file for clarity)
+  const client = await getClient()
+
+  // TODO: Generate a new wallet using PrivateKey.generate()
+  // const privateKey = 
+  
+  // TODO: Create a KeyPair from the private key using KeyPair.derive()
+  // const keyPair = 
+  
+  // TODO: Display the wallet information with success message
+  console.log('🎉 Wallet created successfully!')
+  
+  // TODO: Get the address from the keyPair using keyPair.toAddress()
+  // const address = 
+  
+  // TODO: Log the user-friendly address and public key
+  // console.log('Address:', ...)
+  // console.log('Public Key:', ...)
+
+  // TODO: Check wallet balance using client.getAccount()
+  // const account = 
+  
+  // TODO: Convert balance from lunas to NIM (divide by 1e5) and display
+  // const nim = 
+  // console.log(`Balance: ${nim} NIM`)
 }
 
 main() 

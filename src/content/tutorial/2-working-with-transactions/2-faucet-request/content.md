@@ -6,7 +6,7 @@ terminal:
   panels: ['output']
 ---
 
-# Requesting Testnet Funds from Faucet
+# Requesting Testnet Funds from Faucet 💧
 
 Now that we have a wallet, we need some testnet NIM to work with. The Nimiq testnet provides a faucet service that gives free testnet coins for development and testing purposes.
 
@@ -25,68 +25,81 @@ Looking at the `index.js` file, you can see we have our wallet setup from the pr
 
 ## Step 1: Create a Faucet Request Function
 
-First, let's create a function to request funds from the faucet. Add this function before the main function:
+First, let's create a function to request funds from the faucet. This function uses **early returns** and **clean error handling** - modern JavaScript best practices.
+
+Add this function before the main function:
 
 ```js
-async function requestFromFaucet(address) {
-  const faucetUrl = 'https://faucet.pos.nimiq-testnet.com/tapit'
+async function requestFundsFromFaucet(address) {
+  console.log('💧 Requesting funds from faucet...')
   
-  try {
-    console.log('💧 Requesting funds from faucet...')
-    
-    const response = await fetch(faucetUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: `address=${address.toUserFriendlyAddress()}`
+  const response = await fetch(FAUCET_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ 
+      address: address.toUserFriendlyAddress(),
+      withStackingContract: false
     })
-    
-    if (response.ok) {
-      console.log('✅ Faucet request successful!')
-      return true
-    } else {
-      console.log('❌ Faucet request failed:', response.status)
-      return false
-    }
-  } catch (error) {
-    console.error('❌ Error requesting from faucet:', error.message)
-    return false
+  })
+
+  // Early return with error if request failed
+  if (!response.ok) {
+    throw new Error(`Faucet request failed with status: ${response.status}`)
   }
+
+  const data = await response.json()
+  console.log('💰 Faucet request successful!')
+  return data
 }
 ```
 
 ## Step 2: Request Funds After Creating Wallet
 
-Now let's call the faucet function after we create our wallet. Add this code after displaying the wallet information:
+Now let's call the faucet function after we create our wallet. Add this code after displaying the initial balance:
 
 ```js
 // Request funds from faucet
-const faucetSuccess = await requestFromFaucet(wallet.address)
+await requestFundsFromFaucet(address)
 ```
 
 ## Step 3: Wait and Check Balance Again
 
-Since it takes a moment for the transaction to be processed, let's wait a bit and then check our balance again. Add this code after the faucet request:
+Since it takes a moment for the transaction to be processed, let's wait a bit and then check our balance again:
 
 ```js
-if (faucetSuccess) {
-  console.log('⏳ Waiting for faucet transaction to be processed...')
-  
-  // Wait for a few seconds
-  await new Promise(resolve => setTimeout(resolve, 5000))
-  
-  // Check balance again
-  const newBalance = await client.getBalance(wallet.address)
-  console.log('New Balance:', Nimiq.Policy.lunasToCoins(newBalance), 'NIM')
-  
-  if (newBalance > 0) {
-    console.log('🎉 Successfully received testnet funds!')
-  } else {
-    console.log('⏳ Transaction might still be processing. Try checking again in a moment.')
-  }
+// Wait for funds to arrive
+console.log('⏳ Waiting for transaction to be processed...')
+await new Promise(resolve => setTimeout(resolve, 3000))
+
+// Check balance again
+const updatedAccount = await client.getAccount(address.toUserFriendlyAddress())
+const updatedNim = updatedAccount.balance / 1e5
+console.log(`💰 Updated Balance: ${updatedNim} NIM`)
+
+if (updatedAccount.balance > 0) {
+  console.log('✅ Funds received successfully!')
+} else {
+  console.log('⏳ No funds received yet. Faucet transaction might still be processing.')
 }
 ```
+
+## Key Programming Concepts
+
+### Early Returns and Error Handling
+
+Notice how our `requestFundsFromFaucet` function uses **early returns**:
+- We check if the response is not OK and immediately throw an error
+- This avoids deeply nested code and makes the function easier to read
+- The main `try-catch` block in `main()` handles all errors in one place
+
+### Clean Error Propagation
+
+Instead of catching and re-throwing errors within the faucet function, we let errors bubble up to the main function's error handler. This approach:
+- Reduces code duplication
+- Makes error handling more predictable
+- Follows modern JavaScript best practices
 
 ## Understanding the Process
 
@@ -101,5 +114,3 @@ When you run this code, you'll see:
 **Important**: This faucet only works on the testnet. Never send real NIM to testnet addresses, and never try to use testnet NIM as real currency.
 
 In the next lesson, we'll learn how to create and sign our own transactions!
-
-💡 **Tip**: If the faucet request fails, it might be because you've reached the rate limit. Try again in a few minutes. 

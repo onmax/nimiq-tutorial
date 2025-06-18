@@ -50,7 +50,7 @@ async function main() {
   
   // Request funds from faucet
   await requestFundsFromFaucet(senderWallet.address)
-  await new Promise(resolve => setTimeout(resolve, 10000)) // Wait for funds
+  await new Promise(resolve => setTimeout(resolve, 3000)) // Wait for funds
   
   const senderBalance = await client.getBalance(senderWallet.address)
   console.log('💰 Sender Balance:', Policy.lunasToCoins(senderBalance), 'NIM')

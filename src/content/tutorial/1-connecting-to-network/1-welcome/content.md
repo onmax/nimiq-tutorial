@@ -29,10 +29,7 @@ A blockchain is like a shared digital ledger. Keeping this ledger up to date acr
 
 In this lesson, we'll create a simple Node.js application that connects to the Nimiq test network and establishes consensus.
 
-Look at the `package.json` file on the right. We've already set up the project with the necessary dependencies:
-
-- `@nimiq/core` - The Nimiq core library
-- `esrun` - For running ES modules in Node.js
+Look at the `package.json` file on the right. We've already set up the project with the `@nimiq/core` library which includes the Nimiq Web Client.
 
 The project is configured as an ES module with `"type": "module"` to support modern JavaScript imports.
 

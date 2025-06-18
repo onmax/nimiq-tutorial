@@ -1,58 +1,33 @@
-import { Client, ClientConfiguration, KeyPair, Address, Policy } from '@nimiq/core'
-import { Entropy } from '@nimiq/utils'
+import { KeyPair, PrivateKey } from '@nimiq/core'
+import { getClient } from './consensus.js'
+// import { requestFromFaucet } from './faucet.js'
 
-console.log('Starting Nimiq client...')
-
-// This is the Testnet Faucet URL
-// You can also access it via browser at https://faucet.pos.nimiq-testnet.com/
-const FAUCET_URL = 'https://faucet.pos.nimiq-testnet.com/tapit'
-
-// TODO: Create a faucet request function
+console.log('🚀 Starting Nimiq client...')
 
 async function main() {
   try {
-      // Create client configuration
-  const config = new ClientConfiguration()
-  // We can also use `MainAlbatross` for mainnet
-  config.network('TestAlbatross')
-
-  // We must explicitly set the seed nodes for testnet
-  config.seedNodes([
-    '/dns4/seed1.pos.nimiq-testnet.com/tcp/8443/wss',
-    '/dns4/seed2.pos.nimiq-testnet.com/tcp/8443/wss',
-    '/dns4/seed3.pos.nimiq-testnet.com/tcp/8443/wss',
-    '/dns4/seed4.pos.nimiq-testnet.com/tcp/8443/wss',
-  ])
+    // Setup consensus
+    const client = await getClient()
     
-    // Connect using pico which is faster
-    // Read more at: https://www.nimiq.com/developers/learn/protocol/sync-protocol/nodes-and-sync
-    config.syncMode('pico')
+    // Generate a new wallet 🔐
+    const privateKey = PrivateKey.generate()
     
-    // Print minimal messages
-    config.logLevel('error')
-    
-    // Create the client instance
-    const client = await Client.create(config.build())
-    console.log('Client created, waiting for consensus...')
-    
-    // Wait for consensus
-    await client.waitForConsensusEstablished()
-    console.log('✅ Consensus established!')
-    
-    // Generate a new wallet
-    const entropy = Entropy.generate()
-    const wallet = {
-      keyPair: KeyPair.derive(entropy),
-      address: Address.derive(entropy)
-    }
-    
+    const keyPair = KeyPair.derive(privateKey)
+      
+    // Display the wallet information 
     console.log('🎉 Wallet created successfully!')
-    console.log('Address:', wallet.address.toUserFriendlyAddress())
-    console.log('Public Key:', wallet.keyPair.publicKey.toHex())
     
-    // Check initial balance
-    let balance = await client.getBalance(wallet.address)
-    console.log('Initial Balance:', Policy.lunasToCoins(balance), 'NIM')
+    const address = keyPair.toAddress()
+    console.log('📍 Address:', address.toUserFriendlyAddress())
+    console.log('🔐 Public Key:', keyPair.publicKey.toHex())
+
+    // Check wallet balance 💰
+    const account = await client.getAccount(address.toUserFriendlyAddress());  
+    console.log('📊 Account:', account)  
+    
+    // Convert lunas to NIM. In this case, the balance is always 0 since we just created the wallet.
+    const nim = account.balance / 1e5
+    console.log(`💰 Initial Balance: ${nim} NIM`)
     
     // TODO: Request funds from faucet
     

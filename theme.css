@@ -72,13 +72,13 @@
   --tk-elements-editor-backgroundColor: var(--colors-neutral-0);
   --tk-elements-editor-activeLineBackgroundColor: var(--colors-neutral-50);
   --tk-elements-editor-cursorColor: var(--colors-blue);
-  --tk-elements-editor-selection-backgroundColor: var(--colors-blue-400);
+  --tk-elements-editor-selection-backgroundColor: var(--colors-blue);
   --tk-elements-editor-selection-backgroundOpacity: 0.3;
 
   /* Terminal colors using Nimiq palette */
   --tk-terminal-foreground: var(--colors-neutral);
   --tk-terminal-background: var(--colors-neutral-0);
-  --tk-terminal-selection-background: var(--colors-blue-400);
+  --tk-terminal-selection-background: var(--colors-blue-600);
   --tk-terminal-blue: var(--colors-blue);
   --tk-terminal-green: var(--colors-green);
   --tk-terminal-red: var(--colors-red);
