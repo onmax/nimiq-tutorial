@@ -1,0 +1,9 @@
+{
+  "name": "nimiq-tutorial",
+  "type": "module",
+  "scripts": {
+  },
+  "dependencies": {
+    "@nimiq/core": "latest"
+  }
+} 

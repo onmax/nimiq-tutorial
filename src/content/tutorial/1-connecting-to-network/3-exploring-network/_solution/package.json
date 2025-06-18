@@ -1,11 +1,10 @@
 {
-  "name": "nimiq-tutorial-template",
+  "name": "nimiq-tutorial",
   "type": "module",
   "scripts": {
     "dev": "node --watch index.js"
   },
   "dependencies": {
-    "@nimiq/core": "latest",
-    "esrun": "^3.2.26"
+    "@nimiq/core": "latest"
   }
 } 
