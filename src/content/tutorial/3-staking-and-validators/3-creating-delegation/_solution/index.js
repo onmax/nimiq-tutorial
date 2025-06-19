@@ -1,49 +1,53 @@
 /**
- * Nimiq Tutorial Utilities
+ * Nimiq Staking Tutorial - Creating a Delegation
  * 
- * This module exports commonly used functions across the tutorial lessons
- * to keep the main tutorial files clean and focused on learning objectives.
+ * This lesson demonstrates how to create a staking delegation transaction.
  */
 
-// Client utilities
-export {
-  createAndConnectClient,
-  getNetworkInfo,
-  displayNetworkInfo
-} from './client.js'
+import { Address } from '@nimiq/core'
+import { createAndConnectClient } from './consensus.js'
+import { createWallet, getWallet } from './lib/wallet.js'
+import { getTestnetNIM } from './lib/faucet.js'
+import { getActiveValidators, createDelegationTransaction, sendTransaction } from './lib/staking.js'
 
-// Wallet utilities
-export {
-  createWallet,
-  createWalletFromEntropy,
-  displayWalletInfo,
-  createBasicTransaction,
-  signTransaction
-} from './wallet.js'
+async function main() {
+  console.log('🚀 Welcome to the Staking Delegation Creator!')
+  
+  // Connect to the client
+  const client = await createAndConnectClient('TestAlbatross')
+  
+  // Create or load a wallet
+  let wallet = await getWallet()
+  if (!wallet) {
+    wallet = await createWallet()
+    console.log('✨ New wallet created')
+    
+    // Get some testnet NIM if the wallet is new
+    await getTestnetNIM(wallet.address)
+    console.log('💰 Got some testnet NIM from the faucet')
+  }
+  console.log(`🔑 Wallet address: ${wallet.address.toUserFriendlyAddress()}`)
+  
+  // Get active validators
+  const validators = await getActiveValidators(client)
+  
+  // Choose a validator to delegate to (we'll just pick the first one)
+  const validator = validators[0]
+  const validatorAddress = Address.fromUserFriendlyAddress(validator.address.toUserFriendlyAddress())
+  console.log(`🤝 Delegating to validator: ${validatorAddress.toUserFriendlyAddress()}`)
 
-// Faucet utilities
-export {
-  requestFromFaucet,
-  waitForFaucetFunds
-} from './faucet.js'
+  // Create the delegation transaction
+  const amount = 100 * 1e5 // 100 NIM
+  const fee = 1000 // 0.01 NIM
+  const validityStartHeight = (await client.getHeadBlock()).height
+  const transaction = createDelegationTransaction(wallet, validatorAddress, amount, fee, validityStartHeight)
+  console.log('📄 Created delegation transaction')
 
-// Staking utilities
-export {
-  getActiveValidators,
-  displayValidators,
-  createDelegationTransaction,
-  createUnstakingTransaction,
-  simulateRewardMonitoring,
-  displayStakingTips
-} from './staking.js'
+  // Send the transaction
+  const txHash = await sendTransaction(client, transaction)
+  console.log(`💸 Sent transaction with hash: ${txHash}`)
+  
+  console.log('✅ Delegation transaction created and sent!')
+}
 
-// Validators API utilities
-export {
-  getValidatorsApiUrl,
-  fetchValidatorsFromApi,
-  fetchValidatorFromApi,
-  fetchSupplyFromApi,
-  displayValidatorApiInfo,
-  compareValidatorData,
-  displayNetworkAnalytics
-} from './validators-api.js' 
+main().catch(console.error) 

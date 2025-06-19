@@ -48,102 +48,84 @@ export {
   displayNetworkAnalytics
 } from './validators-api.js'
 
-console.log('🚀 Starting Nimiq Staking Tutorial')
+console.log('🏛️  Welcome to Nimiq Staking Tutorial!')
 
 async function main() {
   try {
-    // Create a configuration builder
-    const config = new ClientConfiguration()
-    
-    // We can also use `MainAlbatross` for mainnet
-    config.network('TestAlbatross')
+    // Connect to the network
+    const client = await createAndConnectClient('TestAlbatross')
 
-    // We must explicitly set the seed nodes for testnet
-    config.seedNodes([
-      '/dns4/seed1.pos.nimiq-testnet.com/tcp/8443/wss',
-      '/dns4/seed2.pos.nimiq-testnet.com/tcp/8443/wss',
-      '/dns4/seed3.pos.nimiq-testnet.com/tcp/8443/wss',
-      '/dns4/seed4.pos.nimiq-testnet.com/tcp/8443/wss',
-    ])
-    
-    // Connect using pico which is faster
-    // Read more at: https://www.nimiq.com/developers/learn/protocol/sync-protocol/nodes-and-sync
-    config.syncMode('pico')
-    
-    // Print minimal messages
-    config.logLevel('error')
-    
-    // Instantiate and launch the client
-    console.log('📡 Creating client and connecting to network...')
-    const client = await Client.create(config.build())
-    
-    // Wait for consensus to be established
-    console.log('⏳ Waiting for consensus to be established...')
-    await client.waitForConsensusEstablished()
-    
-    console.log('✅ Consensus established!')
-    
-    // Get staking information
-    console.log('\n📊 Staking Information:')
-    
-    // Get current epoch
-    const headBlock = await client.getHeadBlock()
-    const currentEpoch = Math.floor(headBlock.height / Policy.EPOCH_LENGTH)
-    
-    console.log(`📅 Current epoch: ${currentEpoch}`)
-    console.log(`📏 Epoch length: ${Policy.EPOCH_LENGTH} blocks`)
-    console.log(`🧱 Current block height: ${headBlock.height}`)
-    console.log(`🔄 Blocks until next epoch: ${Policy.EPOCH_LENGTH - (headBlock.height % Policy.EPOCH_LENGTH)}`)
-    
-    // Get total supply
-    const totalSupply = await client.getTotalSupply()
-    console.log(`💰 Total supply: ${Policy.lunasToCoins(totalSupply)} NIM`)
-    
-    // Show staking economics
-    console.log('\n💼 Staking Economics:')
-    console.log(`🔒 Minimum stake: ${Policy.lunasToCoins(Policy.MINIMUM_STAKE)} NIM`)
-    console.log(`⏰ Jail release delay: ${Policy.JAIL_RELEASE_DELAY} epochs`)
-    console.log(`🚫 Slashing factor: ${Policy.SLASHING_FACTOR}%`)
-    
-    // Get all validators
-    const validators = await client.getValidators()
-    console.log(`\n👥 Total validators: ${validators.length}`)
-    
-    // Calculate total staked amount
-    let totalStaked = 0
-    let activeValidators = 0
-    
-    for (const validator of validators) {
-      totalStaked += validator.balance
-      if (validator.active) {
-        activeValidators++
-      }
-    }
-    
-    console.log(`✅ Active validators: ${activeValidators}`)
-    console.log(`🔒 Total staked: ${Policy.lunasToCoins(totalStaked)} NIM`)
-    console.log(`📈 Staking ratio: ${((totalStaked / totalSupply) * 100).toFixed(2)}%`)
-    
-    // Show top 5 validators by stake
-    const sortedValidators = validators
-      .sort((a, b) => b.balance - a.balance)
+    // Get and display current network information
+    const { blockHeight, currentEpoch, epochLength } = await getNetworkInfo(client)
+    console.log('\n📊 Network Status:')
+    console.log(`Block Height: ${blockHeight}`)
+    console.log(`Current Epoch: ${currentEpoch}`)
+    console.log(`Blocks per Epoch: ${epochLength}`)
+
+    // Get validators from the network
+    console.log('\n🔍 Step 1: Getting validators from the network...')
+    const networkValidators = await getActiveValidators(client)
+
+    // Display basic validator info using console.table
+    const validatorSummary = networkValidators.slice(0, 5).map(validator => ({
+      Address: validator.address.toUserFriendlyAddress().slice(0, 20) + '...',
+      'Stake (NIM)': (validator.balance / 1e5).toFixed(2),
+      Stakers: validator.numStakers,
+    }))
+    console.log('\n📋 Top 5 Active Validators (from Network):')
+    console.table(validatorSummary)
+
+    // Get enhanced validator data from API
+    console.log('\n🌐 Step 2: Fetching enhanced data from Validators API...')
+    const apiValidators = await fetchValidators('testnet')
+
+    // Show validators with metadata using console.table
+    const enhancedValidators = apiValidators
+      .filter(v => v.name || v.description)
       .slice(0, 5)
-    
-    console.log('\n🏆 Top 5 Validators by Stake:')
-    sortedValidators.forEach((validator, index) => {
-      console.log(`${index + 1}. ${validator.address.toUserFriendlyAddress()} - ${Policy.lunasToCoins(validator.balance)} NIM ${validator.active ? '✅' : '❌'}`)
-    })
-    
-    console.log('📚 Staking concepts explained:')
-    console.log('  🏛️  Validators: Secure the network and create blocks')
-    console.log('  🤝 Delegators: Stake NIM with validators to earn rewards')
-    console.log('  💰 Rewards: Earned each epoch based on stake and performance')
-    console.log('  ⚖️  Slashing: Penalty for malicious validator behavior')
-    
-    console.log('✨ Ready to explore validators in the next lesson!')
-    
-  } catch (error) {
-    console.error('Error:', error)
+      .map(validator => ({
+        Name: validator.name || 'N/A',
+        Address: validator.address.slice(0, 20) + '...',
+        'Fee (%)': validator.fee ? (validator.fee * 100).toFixed(2) : 'N/A',
+        Website: validator.website ? '✅' : '❌',
+      }))
+    console.log('\n✨ Top 5 Validators with Enhanced Metadata (from API):')
+    console.table(enhancedValidators)
+
+    // Calculate and display total stake in the network
+    console.log('\n💰 Step 3: Understanding Staking Economics')
+    const totalNetworkStakeLunas = networkValidators.reduce((sum, v) => sum + v.balance, 0)
+    const totalStakeNIM = totalNetworkStakeLunas / 1e5
+    console.log(`Total Network Stake: ${totalStakeNIM.toFixed(2)} NIM`)
+    console.log(`Active Validators: ${networkValidators.length}`)
+    console.log(`Average Stake per Validator: ${(totalStakeNIM / networkValidators.length).toFixed(2)} NIM`)
+
+    // Staking Simulation using @nimiq/utils
+    console.log('\n🎯 Step 4: Staking Simulation')
+    const supplyCalculator = new SupplyCalculator(client)
+    const estimatedAnnualAPY = await supplyCalculator.estimateStakingAPY(totalNetworkStakeLunas)
+
+    if (typeof estimatedAnnualAPY === 'number') {
+      console.log(`Estimated Annual Staking APY (network-wide): ${(estimatedAnnualAPY * 100).toFixed(2)}%`)
+      const simulationAmountNIM = 1000 // 1000 NIM
+      const monthlyRewardNIM = simulationAmountNIM * (estimatedAnnualAPY / 12)
+      const yearlyRewardNIM = simulationAmountNIM * estimatedAnnualAPY
+
+      console.log(`If you stake ${simulationAmountNIM} NIM:`)
+      console.log(`- Estimated monthly reward: ~${monthlyRewardNIM.toFixed(2)} NIM`)
+      console.log(`- Estimated yearly reward: ~${yearlyRewardNIM.toFixed(2)} NIM`)
+    }
+    else {
+      console.log('Could not estimate APY with available information from SupplyCalculator.')
+    }
+
+    console.log('\n✅ Tutorial completed! You now understand:')
+    console.log('  • How to query network validators')
+    console.log('  • How to fetch enhanced validator data from the API')
+    console.log('  • Basic staking economics and reward calculations')
+  }
+  catch (error) {
+    console.error('❌ Error:', error)
   }
 }
 

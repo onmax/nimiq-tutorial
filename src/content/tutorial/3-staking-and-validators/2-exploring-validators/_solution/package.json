@@ -1,0 +1,7 @@
+{
+  "type": "module",
+  "dependencies": {
+    "@nimiq/core": "workspace:^",
+    "@nimiq/utils": "workspace:^"
+  }
+} 

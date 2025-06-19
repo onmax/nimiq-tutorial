@@ -1,0 +1,13 @@
+{
+  "name": "nimiq-cashlink-generator",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Complete Nimiq cashlink generator tool",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@nimiq/core": "^2.0.0"
+  }
+} 

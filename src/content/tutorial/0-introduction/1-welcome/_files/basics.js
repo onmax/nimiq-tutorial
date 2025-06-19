@@ -1,49 +1,19 @@
-import { Client, ClientConfiguration } from '@nimiq/core'
+import { createAndConnectClient, getNetworkInfo } from './lib/consensus.js'
 
 async function main() {
   console.log('🚀 Starting Nimiq Web Client Tutorial')
-
   const now = performance.now()
 
-  // Create a configuration builder
-  const config = new ClientConfiguration()
-
-  // We can also use `MainAlbatross` for mainnet
-  config.network('TestAlbatross')
-
-  // We must explicitly set the seed nodes for testnet
-  config.seedNodes([
-    '/dns4/seed1.pos.nimiq-testnet.com/tcp/8443/wss',
-    '/dns4/seed2.pos.nimiq-testnet.com/tcp/8443/wss',
-    '/dns4/seed3.pos.nimiq-testnet.com/tcp/8443/wss',
-    '/dns4/seed4.pos.nimiq-testnet.com/tcp/8443/wss',
-  ])
-
-
-  // Connect using pico which is faster
-  config.syncMode('pico')
-
-  // We don't want to see any logs
-  config.logLevel('error')
-
-  // Instantiate and launch the client
+  // Create and connect client
+  const client = await createAndConnectClient()
   console.log('📡 Creating client and connecting to network...')
-  const client = await Client.create(config.build())
 
-  // Wait for consensus to be established
-  console.log('⏳ Waiting for consensus to be established...')
-  await client.waitForConsensusEstablished()
-
-  console.log('✅ Consensus established!')
-
-  // Get and log the current block height
-  const headBlock = await client.getHeadBlock()
-  console.log(`📊 Current block height: ${headBlock.height}`)
-  console.log(`🧱 Head block hash: ${headBlock.hash}`)
-  console.log(`⏰ Head block timestamp: ${new Date(headBlock.timestamp * 1000)}`)
-
-  const networkId = await client.getNetworkId()
-  console.log(`🌐 Connected to network: ${networkId}`)
+  // Wait for consensus and get network info
+  const info = await getNetworkInfo(client)
+  console.log(`📈 Current block height: ${info.blockHeight}`)
+  console.log(`🧑‍🔬 Head block hash: ${info.hash}`)
+  console.log(`⏰ Head block timestamp: ${new Date(info.timestamp * 1000)}`)
+  console.log(`🌐 Connected to network: ${info.networkId}`)
 
   const end = performance.now()
   console.log(`🕒 Time taken: ${end - now}ms`)

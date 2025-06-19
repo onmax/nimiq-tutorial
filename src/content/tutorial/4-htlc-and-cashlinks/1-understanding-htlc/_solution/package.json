@@ -1,0 +1,13 @@
+{
+  "name": "nimiq-htlc-explorer",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Learn about Nimiq Hash Time Locked Contracts",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@nimiq/core": "^2.0.0"
+  }
+} 
