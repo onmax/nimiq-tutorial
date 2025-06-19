@@ -12,6 +12,7 @@ focus: /index.js
 - **Understand validator properties** like stake, reward address, and status
 - **Explore the staking contract** and delegation information
 - **Learn about validator selection** and epoch mechanics
+- **Use the Validators API** for enhanced validator data and analytics
 
 ## Learning
 
@@ -45,14 +46,34 @@ Nimiq uses a special **staking contract** to manage all delegation:
 - **Automatic reward distribution** each epoch
 - **Transparent delegation tracking** on-chain
 
+### Nimiq Validators API
+
+In addition to querying validators directly from the network, Nimiq provides a **Validators API** that offers enhanced data and analytics:
+
+**API Endpoints:**
+- **`/api/v1/validators`** - Retrieve the complete validator list with filtering options
+- **`/api/v1/validators/:validator_address`** - Get detailed information about a specific validator
+- **`/api/v1/supply`** - Retrieve supply status and staking metrics
+
+**Enhanced Features:**
+- **Validator Trust Score (VTS)** - Performance and reliability metrics
+- **Historical data** - 9+ months of validator performance history
+- **Rich metadata** - Validator descriptions, logos, contact information, payout policies
+- **Network analytics** - Staking distribution, decentralization metrics
+
+**API Base URLs:**
+- **Mainnet:** `https://validators-api-mainnet.pages.dev`
+- **Testnet:** `https://validators-api-testnet.pages.dev`
+
 ### Querying Network Information
 
 We can query various staking-related information:
 
-1. **Active validators** and their properties
+1. **Active validators** and their properties (via client or API)
 2. **Total staked amount** across the network
 3. **Current epoch** and staking parameters
 4. **Individual delegations** and their status
+5. **Validator performance metrics** and trust scores (via API)
 
 ## Your Task
 
