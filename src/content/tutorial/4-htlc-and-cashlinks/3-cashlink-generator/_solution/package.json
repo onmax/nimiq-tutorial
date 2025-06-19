@@ -1,0 +1,25 @@
+{
+  "name": "nimiq-cashlink-generator",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Complete Nimiq cashlink generator tool",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "generate": "node index.js generate",
+    "fund": "node index.js fund",
+    "export": "node index.js export"
+  },
+  "dependencies": {
+    "@nimiq/core": "^2.0.0"
+  },
+  "keywords": [
+    "nimiq",
+    "cashlink",
+    "htlc",
+    "blockchain",
+    "cryptocurrency"
+  ],
+  "author": "Nimiq Tutorial",
+  "license": "MIT"
+} 
