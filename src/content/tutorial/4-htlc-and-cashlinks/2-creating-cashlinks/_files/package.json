@@ -5,9 +5,9 @@
   "description": "Create your first Nimiq cashlinks",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "dev": "node --watch index.js"
   },
   "dependencies": {
-    "@nimiq/core": "^2.0.0"
+    "@nimiq/core": "latest"
   }
 } 

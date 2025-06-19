@@ -5,13 +5,13 @@
   "description": "Complete Nimiq cashlink generator tool",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "dev": "node --watch index.js",
     "generate": "node index.js generate",
     "fund": "node index.js fund",
     "export": "node index.js export"
   },
   "dependencies": {
-    "@nimiq/core": "^2.0.0"
+    "@nimiq/core": "latest"
   },
   "keywords": [
     "nimiq",
