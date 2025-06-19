@@ -1,5 +1,7 @@
 ---
 type: tutorial
+meta:
+  image: /og-image.jpg
 ---
 
 # 🚀 Nimiq Web Client Tutorial

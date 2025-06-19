@@ -11,6 +11,8 @@
     }
   },
   "exclude": [
-    "dist"
+    "dist",
+    "src/content/tutorial/**/_files/**/*",
+    "src/content/tutorial/**/_solution/**/*"
   ]
 }

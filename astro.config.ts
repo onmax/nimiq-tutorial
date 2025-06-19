@@ -11,9 +11,6 @@ export default defineConfig({
       components: {
         TopBar: './src/components/CustomTopBar.astro',
       },
-      config: {
-        ogImage: '/og-image.jpg',
-      },
     }),
   ],
 });
