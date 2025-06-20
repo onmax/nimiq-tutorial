@@ -2,86 +2,128 @@
 type: lesson
 title: Exploring Validators and Staking Pool
 focus: /index.js
+terminal:
+  panels: ['output']
 ---
 
-# Exploring Validators and Staking Information
+# Exploring Validators 🔍
 
-## Overview
+Time to meet the validators! You're about to research and explore the network participants who will help you earn staking rewards. Think of this as "validator shopping" - finding the best partner for your staking journey.
 
-- **Query active validators** from the Nimiq network
-- **Understand validator properties** like stake, reward address, and status
-- **Explore the staking contract** and delegation information
-- **Learn about validator selection** and epoch mechanics
-- **Use the Validators API** for enhanced validator data and analytics
+## Why Validator Selection Matters
 
-## Learning
+Choosing the right validator directly impacts your staking success:
 
-Now that we understand staking concepts, let's explore the actual validators on the network and learn how to query staking information.
+✅ **Higher Rewards** - Performance affects your earnings  
+✅ **Reliable Payouts** - Uptime determines consistent rewards  
+✅ **Trust & Security** - Validator behavior affects your staked funds  
+✅ **Long-term Partnership** - Your chosen validator manages your stake
 
-### Validator Information
+## What You'll Discover
 
-Each validator has several important properties:
+By exploring validators, you'll learn to evaluate:
 
-**Validator Address:**
-- Unique identifier for the validator
-- Used when creating delegation transactions
+✅ **Stake amounts** and voting power  
+✅ **Performance metrics** and reliability  
+✅ **Reward policies** and payout addresses  
+✅ **Validator status** and activity levels
 
-**Stake Amount:**
-- Total NIM staked by the validator and their delegators
-- Determines validator's voting power and block production probability
+## Validator Deep Dive
 
-**Reward Address:**
-- Address where validator rewards are sent
-- Can be different from the validator's signing address
+Each validator has key properties that affect your staking experience:
 
-**Status:**
-- Active: Currently participating in consensus
-- Inactive: Not participating (possibly jailed or voluntarily inactive)
+#### Validator Address 📍
+- Unique identifier for each validator
+- What you'll use when creating your delegation transaction
+- Like a validator's "account number"
 
-### Staking Contract
+#### Stake Amount 💰
+- Total NIM staked by validator + all their stakers
+- Determines voting power and block production chances
+- Higher stake often means more frequent rewards
 
-Nimiq uses a special **staking contract** to manage all delegation:
+#### Reward Address 🎁
+- Where the validator receives their earned rewards
+- Can differ from their main validator address
+- Shows how they manage their earnings
 
-- **Single contract address** for all staking operations
-- **Automatic reward distribution** each epoch
-- **Transparent delegation tracking** on-chain
+#### Validator Status ⚡
+- **Active**: Currently validating and earning rewards
+- **Inactive**: Not participating (possibly penalized or offline)
+- Only stake with active validators!
 
-### Nimiq Validators API
+## The Staking Contract Hub
 
-In addition to querying validators directly from the network, Nimiq provides a **Validators API** that offers enhanced data and analytics:
+Nimiq uses a central **staking contract** that manages everything:
 
-**API Endpoints:**
-- **`/api/v1/validators`** - Retrieve the complete validator list with filtering options
-- **`/api/v1/validators/:validator_address`** - Get detailed information about a specific validator
-- **`/api/v1/supply`** - Retrieve supply status and staking metrics
+- **Single address** handles all network staking
+- **Automatic distributions** every epoch
+- **Transparent tracking** of all delegations
+- **On-chain verification** of all staking activity
 
-**Enhanced Features:**
-- **Validator Trust Score (VTS)** - Performance and reliability metrics
-- **Historical data** - 9+ months of validator performance history
-- **Rich metadata** - Validator descriptions, logos, contact information, payout policies
-- **Network analytics** - Staking distribution, decentralization metrics
+## Nimiq Validators API: Your Research Tool
 
-**API Base URLs:**
-- **Mainnet:** `https://validators-api-mainnet.pages.dev`
-- **Testnet:** `https://validators-api-testnet.pages.dev`
+Beyond basic network queries, the Validators API provides powerful research data:
 
-### Querying Network Information
+#### **Key Endpoints** 🔗
+- `/api/v1/validators` - Complete validator list with filters
+- `/api/v1/validators/:address` - Detailed validator information  
+- `/api/v1/supply` - Network staking statistics
 
-We can query various staking-related information:
+#### **Enhanced Research Features** ⭐
+- **Validator Trust Score (VTS)** - Performance and reliability ratings
+- **Historical performance** - 9+ months of track record data
+- **Rich metadata** - Descriptions, logos, contact info, payout policies
+- **Network analytics** - Staking distribution and decentralization metrics
 
-1. **Active validators** and their properties (via client or API)
-2. **Total staked amount** across the network
-3. **Current epoch** and staking parameters
-4. **Individual delegations** and their status
-5. **Validator performance metrics** and trust scores (via API)
+#### **API Networks** 🌐
+- **Mainnet**: `https://validators-api-mainnet.pages.dev`
+- **Testnet**: `https://validators-api-testnet.pages.dev`
 
-## Your Task
+## Your Validator Research Mission
+
+In this lesson, you'll become a validator detective by:
+
+1. **Connecting to the Network** 🔌 - Establish your research connection
+2. **Querying Active Validators** 👥 - See who's currently validating  
+3. **Analyzing Staking Data** 📈 - Understand total network stake
+4. **Exploring Epoch Information** ⏰ - Learn about reward cycles
+
+## What You'll Learn to Evaluate
+
+**Performance Indicators:**
+- Uptime and reliability history
+- Reward consistency and timing
+- Total stake and delegator count
+
+**Trust Factors:**
+- Validator description and transparency
+- Contact information and communication
+- Community reputation and involvement
+
+**Economic Factors:**
+- Fee structures and payout policies
+- Stake concentration and decentralization
+- Historical reward rates
+
+## Your Staking Success Depends on This!
+
+Just like choosing a bank or investment advisor, selecting the right validator is crucial for your staking success. The research you do here will directly impact:
+
+- How much you earn in rewards
+- How reliably you receive payouts  
+- How secure your staked funds remain
+- How smooth your staking experience will be
 
 In this lesson, we'll:
 
-1. **Connect to the network** and establish consensus
-2. **Query active validators** and display their information
-3. **Get staking contract details** and total staked amounts
-4. **Explore epoch information** and validator statistics
+1. **Connect to the network** 🔌 and establish consensus
+2. **Query active validators** 👥 and display their information
+3. **Get staking contract details** 📋 and total staked amounts
+4. **Explore epoch information** ⏰ and validator statistics
 
-Complete the code to query and display validator information from the Nimiq network! 
+The code will help you query live validator data and make informed decisions about where to stake your NIM! 🌟
+
+## Ready to Research?
+
+Let's start exploring validators and gathering the data you need to make smart staking decisions. You're about to become a validator expert! 🔍

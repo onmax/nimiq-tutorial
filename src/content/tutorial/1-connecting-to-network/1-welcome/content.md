@@ -2,35 +2,80 @@
 type: lesson
 title: Understanding Nimiq and Blockchain Basics
 focus: /package.json
+terminal:
+  panels: ['output']
 ---
 
-# Connecting to the Nimiq Network
+# Connecting to the Nimiq Network! 🌐
 
-## Overview
+Welcome to your first hands-on lesson! In this part, you'll connect directly to the Nimiq blockchain and see it in action.
 
-- **Nimiq** is a censorship-resistant, privacy-oriented, and decentralized blockchain-based payment protocol
-- A **blockchain** is a shared digital ledger that is kept up-to-date across all users in the network through a process called establishing consensus
-- Compared to most other blockchain systems, it allows a direct connection to the network using a light or pico node, even in the browser
-- These light nodes use **Zero Knowledge Proofs (ZKPs)** to efficiently verify blockchain transactions and states
+## What You'll Build
 
-## Learning
+By the end of this section, you'll have a working application that:
 
-Nimiq is a blockchain-based payment protocol. This technology offers several key benefits:
+✅ **Connects to the Nimiq network** - No third parties needed!  
+✅ **Establishes consensus** - Syncs with the global blockchain  
+✅ **Reads live blockchain data** - See real transactions and blocks  
+✅ **Works in any environment** - Browser, Node.js, anywhere JavaScript runs
 
-- **Censorship-resistant:** No one can prevent you from using it
-- **Privacy-oriented:** You don't need to provide any personal information to open an account
-- **Decentralized:** It's not controlled by any single person but by all its users
+## What Makes Nimiq Special? 
 
-A blockchain is like a shared digital ledger. Keeping this ledger up to date across all users in the network is called establishing consensus. Traditionally, most blockchain systems require you to connect through a third party to avoid downloading the entire blockchain, which can be over 100 GB in size. This approach necessitates trusting the third party.
+Most blockchains require you to either:
+- Download 100+ GB of data, or  
+- Trust a third-party service to access the network
 
-**Nimiq allows direct connection to the network** with Zero Knowledge Proofs (ZKPs) for both light and full nodes. Unlike history nodes, which download and verify the entire blockchain, light and full nodes only download the necessary data to verify the macro chain's validity. This approach significantly reduces storage and computational requirements, making light nodes ideal for devices with limited resources, such as browsers or mobile devices, and making full nodes much lighter.
+**Nimiq is different!** You can connect directly to the blockchain with just a few lines of JavaScript:
 
-## Your First Nimiq Application
+🚀 **Browser-Native**: Works directly in web browsers  
+🔒 **No Trust Required**: Connect directly, no intermediaries  
+⚡ **Zero Knowledge Proofs**: Verify everything without downloading everything  
+🪶 **Lightweight**: Only downloads what you need
 
-In this lesson, we'll create a simple Node.js application that connects to the Nimiq test network and establishes consensus.
+---
 
-Look at the `package.json` file on the right. We've already set up the project with the `@nimiq/core` library which includes the Nimiq Web Client.
+#### 🔗 Blockchain = Shared Digital Ledger
+Think of it like a shared spreadsheet that everyone can read, but no one can cheat on. Every transaction is recorded and verified by the network.
 
-The project is configured as an ES module with `"type": "module"` to support modern JavaScript imports.
+#### 🤝 Consensus = Agreement
+All computers in the network agree on what transactions are valid. This keeps everyone synchronized with the same "truth."
 
-Now let's create the main application file to connect to the Nimiq network!
+#### 🕵️ Zero Knowledge Proofs = Smart Verification
+Instead of downloading everything, Nimiq uses mathematical proofs to verify blockchain data efficiently. It's like checking if someone knows a secret without them telling you the secret!
+
+#### 🌟 Why This Matters
+- **Censorship-resistant**: No one can block your transactions
+- **Privacy-oriented**: No personal information required  
+- **Decentralized**: Controlled by users, not corporations
+
+## Your First Connection
+
+Let's build a simple app that connects to the Nimiq testnet (a safe playground version of the blockchain).
+
+#### Project Setup
+
+Look at the `package.json` file → 
+
+We've already configured everything you need:
+- `@nimiq/core` - The complete Nimiq Web Client
+- `"type": "module"` - Modern JavaScript support
+- Ready-to-run scripts
+
+#### What We'll Code
+
+In the next step, we'll create an `index.js` file that:
+
+1. **Imports the Nimiq client** 📦
+2. **Connects to the test network** 🔌  
+3. **Waits for consensus** ⏳
+4. **Shows live blockchain data** 📊
+
+You'll see real blockchain information appear in your terminal - blocks being created, transactions happening, the network staying in sync!
+
+## Ready to Connect?
+
+The beauty of Nimiq is its simplicity. With just a few lines of code, you'll be talking directly to a global blockchain network.
+
+**No complex setup, no massive downloads, no third-party APIs needed.**
+
+Let's start coding! 👨‍💻
