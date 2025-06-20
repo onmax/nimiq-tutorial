@@ -6,23 +6,44 @@ terminal:
   panels: ['output']
 ---
 
-# Congratulations! 🎉
+# You Did It! 🎉
 
-You've successfully completed the "Connecting to the Network" tutorial! Let's review what you've accomplished.
+Congratulations! You've just accomplished something pretty amazing - you built your first blockchain application and connected directly to a global network!
 
-## What You've Learned
+## What You Actually Built
 
-✅ **Nimiq Fundamentals**: You now understand that Nimiq is a censorship-resistant, privacy-oriented, and decentralized blockchain-based payment protocol.
+Look at what you created with just a few lines of JavaScript:
 
-✅ **Zero Knowledge Proofs**: You learned how Nimiq uses ZKPs to allow direct connection to the network with light nodes, even in browsers.
+✅ **A Real Blockchain Connection** - Your app talks directly to the Nimiq network  
+✅ **Live Data Access** - You're reading real-time blockchain information  
+✅ **Global Network Participation** - You joined thousands of nodes worldwide  
+✅ **Zero Trust Required** - No third parties, no APIs, direct blockchain access
 
-✅ **Client Configuration**: You can create and configure a Nimiq client using `ClientConfiguration()`.
+Your `index.js` file is now a fully functional blockchain application! 🌟
 
-✅ **Network Connection**: You know how to connect to the Nimiq Testnet using `config.network('TestAlbatross')`.
+## The Magic You Just Performed
 
-✅ **Consensus Establishment**: You can wait for consensus to be established with `client.waitForConsensusEstablished()`.
+Think about what you achieved:
 
-✅ **Network Exploration**: You can retrieve and display network information like block height, network ID, and head block details.
+- **Connected to a global network** of computers maintaining a shared ledger
+- **Established cryptographic consensus** without trusting anyone
+- **Read live blockchain data** from anywhere in the world
+- **Did it all in a browser** with pure JavaScript
+
+This is the future of decentralized applications, and you just built one! 
+
+## You're Ready for More!
+
+Now that you can connect to Nimiq, you're ready to build even more powerful applications:
+
+💰 **Working with Transactions** 💰  
+Learn to create wallets, request test funds, and send your first blockchain transaction
+
+🏛️ **Staking and Validators** 🏛️  
+Discover how to earn rewards by participating in Nimiq's Proof-of-Stake consensus
+
+🔗 **HTLC and Cashlinks** 🔗  
+Create shareable payment links that anyone can claim
 
 ## Next Steps
 
@@ -37,4 +58,7 @@ Now that you can connect to the Nimiq network, you're ready to explore more adva
 
 [Share your achievement on Twitter](https://twitter.com/intent/tweet?text=I%20just%20learned%20how%20to%20establish%20consensus%20using%20the%20%40nimiq%20web%20client%21%20Check%20it%20out%20here%3A%20https%3A%2F%2Fwww.nimiq.com%2Fdevelopers%2Fbuild%2Fweb-client%2Ftutorials%2Fconnecting-to-the-network) and join the friendly Nimiq Community on [Telegram](https://t.me/joinchat/AAAAAEJW-ozFwo7Er9jpHw) and [Discord](https://discord.gg/cMHemg8), fellow devs are keen to help.
 
-Great job completing this tutorial! You're now ready to start building amazing applications with Nimiq! 🚀 
+
+---
+
+**Ready for your next challenge?** Let's start working with transactions and wallets! 🚀 

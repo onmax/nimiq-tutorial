@@ -2,93 +2,106 @@
 type: lesson
 title: Monitoring Staking Rewards and Performance
 focus: /index.js
+terminal:
+  panels: ['output']
 ---
 
-# Monitoring Staking Rewards and Performance
+# Monitoring Your Staking Rewards 📊
 
-## Overview
+You've created your delegation transaction - now let's complete the staking cycle by sending it to the network and learning how to track your rewards and validator performance over time.
 
-- **Send staking transactions** to the network
-- **Query delegation status** and staked amounts
-- **Monitor reward accumulation** across epochs
-- **Track validator performance** and your returns
+## What You'll Learn
 
-## Learning
+In this final staking lesson, you'll:
 
-In this final staking lesson, we'll complete the staking cycle by sending our delegation transaction and learning how to monitor our staking rewards over time.
+✅ **Send your delegation** to the Nimiq network  
+✅ **Monitor transaction confirmation** and status  
+✅ **Track your staking rewards** as they accumulate  
+✅ **Evaluate validator performance** for your delegation
 
-### Sending Staking Transactions
+## Sending Your Delegation
 
-Once you've created and signed a staking transaction, you can send it to the network:
+Once you've created and signed your staking transaction, you can broadcast it:
 
 ```javascript
 const txHash = await client.sendTransaction(signedTransaction)
 ```
 
-The transaction will be:
-1. **Broadcast** to the network
-2. **Included** in a block by validators
-3. **Executed** by the staking contract
-4. **Confirmed** after block finalization
+**What happens next:**
+1. **Network broadcast** - Your transaction spreads across the network
+2. **Block inclusion** - Validators include it in the next block
+3. **Contract execution** - The staking contract processes your delegation
+4. **Confirmation** - Your stake becomes active after block finalization
 
-### Monitoring Delegations
+## Checking Your Delegation Status
 
-After your transaction is confirmed, you can query your delegation status:
+After your transaction confirms, you can verify your delegation:
 
-**Check Staked Amount:**
-- Query how much NIM you have delegated
-- See which validator you're staking with
-- View when the delegation was created
+#### Staked Amount Verification
+- Confirm how much NIM you've successfully delegated
+- Verify which validator is managing your stake
+- Check when your delegation became active
 
-**Track Rewards:**
-- Rewards accumulate each epoch (typically every few hours)
-- Rewards are automatically added to your staked amount
-- No need to manually claim rewards
+#### Reward Tracking
+- Rewards accumulate automatically each epoch
+- New rewards are added directly to your staked amount
+- No manual claiming required - it's all automatic
 
-### Epoch Mechanics
+## Understanding Epochs
 
-Understanding epochs is crucial for staking:
+Epochs are the heartbeat of Nimiq's reward system:
 
-**Epoch Duration:**
-- Fixed number of blocks per epoch
-- Rewards are calculated and distributed at epoch boundaries
-- Your first rewards appear in the epoch after delegation
+#### How Epochs Work
+- **Fixed duration** - Each epoch lasts a set number of blocks
+- **Reward cycles** - Rewards are calculated and distributed at epoch boundaries  
+- **Activation timing** - Your first rewards appear in the epoch after delegation
 
-**Reward Distribution:**
-- Validators earn block rewards and fees
-- Rewards are shared with delegators proportionally
-- Higher-performing validators may earn more rewards
+#### Reward Distribution Process
+- Validators earn rewards for producing blocks
+- Rewards are shared proportionally with all their stakers
+- Higher-performing validators typically generate better returns
 
-### Performance Metrics
+## Key Performance Metrics
 
-Monitor these key metrics for your staking:
+Monitor these indicators to evaluate your staking success:
 
-**Validator Performance:**
-- **Uptime:** How often the validator is online and participating
-- **Block Production:** Number of blocks produced vs. expected
-- **Slashing Events:** Any penalties incurred by the validator
+#### Validator Performance
+- **Uptime percentage** - How consistently your validator participates
+- **Block production rate** - Blocks produced versus expected
+- **Slashing history** - Any penalties that could affect your rewards
 
-**Your Returns:**
-- **APY (Annual Percentage Yield):** Expected yearly return
-- **Reward Rate:** NIM earned per epoch
-- **Compounding:** Rewards automatically restaked for compound growth
+#### Your Staking Returns
+- **APY (Annual Percentage Yield)** - Expected yearly return rate
+- **Epoch rewards** - NIM earned per reward cycle
+- **Compound growth** - Automatic restaking increases your stake over time
 
-### Unstaking Process
+## The Unstaking Process
 
-When you want to withdraw your stake:
+When you need to withdraw your staked NIM:
 
-1. **Create unstaking transaction** targeting the staking contract
-2. **Wait for the unbonding period** (typically 14 days)
-3. **Withdraw funds** after the waiting period ends
-4. **Rewards stop** accumulating immediately upon unstaking
+1. **Create unstaking transaction** - Signal your intent to withdraw
+2. **Unbonding period** - Wait through the security delay (typically 14 days)
+3. **Fund withdrawal** - Claim your NIM after the waiting period
+4. **Reward cessation** - Earnings stop immediately when you unstake
 
-## Your Task
+## Implementation Steps
 
-In this lesson, we'll:
+In this lesson, you'll complete your staking journey:
 
-1. **Send the delegation transaction** from the previous lesson
-2. **Wait for confirmation** and check transaction status
-3. **Query our delegation** to verify it was successful
-4. **Monitor rewards** over time (simulation)
+1. **Send Your Delegation** 📤 - Broadcast your transaction to the network
+2. **Verify Confirmation** ✅ - Check that your delegation was successful  
+3. **Query Delegation Status** 🔍 - Confirm your stake is active
+4. **Simulate Reward Monitoring** 📈 - Learn how to track your earnings
 
-Complete the final piece of the staking puzzle! 
+## After This Lesson
+
+Once you complete this tutorial, you'll understand the complete staking lifecycle:
+
+✅ How to research and select validators  
+✅ How to create and send delegation transactions  
+✅ How to monitor your rewards and validator performance  
+✅ How to manage your stake over time
+
+## Getting Started
+
+Let's send your delegation and start monitoring your staking rewards. You're about to complete your comprehensive staking education and see your first delegation in action on the Nimiq network. 

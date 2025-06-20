@@ -6,69 +6,89 @@ terminal:
   panels: ['terminal']
 ---
 
-# Nimiq Web Client Tutorial
+# Welcome to Nimiq Web Tutorial! 🚀
 
-Find out how to develop decentralised applications using the Nimiq blockchain and the web client.
+**Nimiq** is a browser-native blockchain that lets you build decentralized applications without complex setup. No downloads, no installations - just JavaScript that connects directly to the blockchain!
 
-## What You'll Learn
+## What Makes This Tutorial Special?
 
-Build applications that connect directly to the **Nimiq blockchain**.
+- **Zero setup required** - Everything runs in your browser
+- **Real blockchain interaction** - Connect to the actual Nimiq network
+- **Hands-on learning** - Try code examples immediately
+- **Beginner-friendly** - No prior blockchain experience needed
 
-## Tutorial Structure
+## What You'll Build
 
-- [Part 1: Connecting to the Network](/1-connecting-to-network/1-welcome): Network connections, consensus, and blockchain fundamentals
-- [Part 2: Working with Transactions](/2-working-with-transactions/1-wallet-setup): Wallets, payments, and transaction handling  
-- [Part 3: Staking and Validators](/3-staking-and-validators/1-understanding-staking): Proof-of-Stake operations and delegation
+By the end of this tutorial, you'll know how to:
 
-## Getting Started
+✅ **Connect to the Nimiq network** and read blockchain data  
+✅ **Create wallets** and send transactions  
+✅ **Work with staking** to earn rewards  
+✅ **Create cashlinks** for shareable payments  
+✅ **Build real applications** that users can interact with
 
-First, install the dependencies:
+## Tutorial Overview
+
+**Part 1: Connecting to the Network**
+Learn how to connect to Nimiq and explore the blockchain
+
+**Part 2: Working with Transactions**
+Create wallets, request test funds, and send your first transaction
+
+**Part 3: Staking and Validators**
+Understand Proof-of-Stake and earn rewards by delegating
+
+**Part 4: HTLC and Cashlinks**
+Create shareable payment links using Hash Time Locked Contracts
+
+## Let's Get Started!
+
+First, let's install the tutorial dependencies:
 
 ```bash
 npm install
 ```
 
-Then you can run any of the interactive examples:
-
-- `npm run basics` - Network connection and consensus
-- `npm run transactions` - Wallet and payment system  
-- `npm run staking` - Delegation and rewards
-
-Try running `npm install` in the terminal below, followed by `npm run basics` to see the network connection in action!
-
-You can interact with the terminal directly - try running these commands:
+Then try your first example:
 
 ```bash
-# Install dependencies
-npm install
-
-# Run the basic network connection example
 npm run basics
-
-# Or try other examples
-npm run transactions
-npm run staking
 ```
 
-## Prerequisites
+This will connect to the Nimiq network and show you live blockchain data!
 
-- Basic JavaScript/Node.js knowledge
-- Understanding of async/await patterns
+#### Other Examples You Can Try
 
-## Additional Resources
+Once you're comfortable, explore these other examples:
 
-Visit [**Nimiq Documentation**](https://nimiq.dev) for complete API reference.
+- `npm run transactions` - Send payments and manage wallets
+- `npm run staking` - Delegate tokens and earn rewards
+- `npm run htlc` - Create shareable payment links (cashlinks)
 
-### JavaScript Runtime
+## What You Need to Know
 
-This tutorial runs in a **WebContainer** - a full Node.js environment that runs directly in your browser. This means:
+**JavaScript Basics**: You should be comfortable with:
+- Variables and functions
+- `async/await` (we'll guide you through this)
+- Basic object manipulation
 
-- All code examples are written for **Node.js** 
-- You get a real terminal and file system
-- No local setup required
+**New to Blockchain?** No problem! We'll explain everything as we go.
 
-The Nimiq web client works is meant to work in any JavaScript runtime: NodeJS, browser, Deno, Bun, Cloudflare Workers... Visit [nimiq.com](https://nimiq.com) to learn more about the differences between runtime environments and how to adapt code for your specific use case. 
+## About This Environment
+
+This tutorial runs in your browser using **WebContainer** - a real Node.js environment that needs no setup. You get:
+
+- A working terminal (try it below!)
+- A complete file system
+- All the tools you need to build with Nimiq
+
+The code you write here works in any JavaScript environment: browsers, Node.js, or modern runtimes like Deno and Bun.
+
+## Need Help?
+
+- 📖 [Complete Nimiq Documentation](https://nimiq.dev)
+- 🌐 [Learn more about Nimiq](https://nimiq.com)
 
 ---
 
-**Ready to start?** Begin with [Connecting to the Network](/tutorial/1-connecting-to-network/1-welcome)!
+**Ready to build your first blockchain app?** 
