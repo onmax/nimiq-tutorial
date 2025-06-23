@@ -6,7 +6,7 @@ terminal:
   panels: ['output']
 ---
 
-# Creating Your First Nimiq Wallet! 🔐
+# Creating Your First Nimiq Wallet!
 
 Time to create your blockchain identity! A wallet is your gateway to the Nimiq network - it lets you send, receive, and manage your digital assets.
 
@@ -25,7 +25,7 @@ We'll create a brand new wallet and connect it to the testnet. Look at the `inde
 
 Let's create your blockchain identity step by step!
 
-## Step 1: Generate Your Private Key 🔑
+## Step 1: Generate Your Private Key
 
 This creates the foundation of your wallet - your unique secret key:
 
@@ -36,7 +36,7 @@ const privateKey = PrivateKey.generate()
 
 **What this does:** Generates a cryptographically secure random private key. This is like creating a master password for your blockchain identity!
 
-## Step 2: Create Your KeyPair 🗝️
+## Step 2: Create Your KeyPair
 
 Transform your private key into a working keypair:
 
@@ -47,7 +47,7 @@ const keyPair = KeyPair.derive(privateKey)
 
 **What this does:** Derives your public key from the private key using elliptic curve cryptography. Now you have both keys needed for blockchain operations!
 
-## Step 3: Get Your Address 📍
+## Step 3: Get Your Address
 
 Create your public blockchain address:
 
@@ -58,7 +58,7 @@ const address = keyPair.toAddress()
 
 **What this does:** Generates your Nimiq address from your public key. This is what people will use to send you NIM - like your blockchain "email address"!
 
-## Step 4: Display Your Wallet Identity 🎉
+## Step 4: Display Your Wallet Identity
 
 Let's see your new blockchain identity:
 
@@ -71,7 +71,7 @@ console.log('🔐 Public Key:', keyPair.publicKey.toHex())
 
 **What you'll see:** Your unique Nimiq address (starting with 'NQ') and your public key in hexadecimal format.
 
-## Step 5: Check Your Balance 💰
+## Step 5: Check Your Balance
 
 Let's check if your wallet has any funds:
 
@@ -85,7 +85,11 @@ const nim = account.balance / 1e5
 console.log(`💰 Balance: ${nim} NIM`)
 ```
 
-**What this does:** Queries the blockchain for your account information. Since this is a brand new wallet, you'll see 0 NIM - but that's about to change! 
+**What this does:** Queries the blockchain for your account information. Since this is a brand new wallet, you'll see 0 NIM - but that's about to change!
+
+In the Nimiq blockchain, the smallest unit is called a 'luna'. One NIM equals 100,000 lunas.
+
+> Tip: In JavaScript, you can use the number `1e5` to represent 100,000, i.e. one followed by five zeroes.
 
 ## Understanding Your Output
 
@@ -100,8 +104,8 @@ When you run this code, you'll see:
 
 Each time you run this code, you create a **completely new wallet** with a new address and keys. This means:
 
-✅ **Great for learning**: Safe to experiment with  
-⚠️ **Remember**: Any funds will be "lost" when you restart (since you get a new address)
+- ✅ **Great for learning**: Safe to experiment with
+- ⚠️ **Remember**: Any funds will be "lost" when you restart (since you get a new address)
 
 **In real applications**, you'd save and load your private key securely. We'll cover proper wallet storage in advanced tutorials!
 
@@ -110,10 +114,10 @@ Each time you run this code, you create a **completely new wallet** with a new a
 Congratulations! You now have:
 
 - **A unique blockchain identity**
-- **The ability to receive NIM** at your address  
+- **The ability to receive NIM** at your address
 - **A wallet that can sign transactions**
 - **Your first step** toward building payment applications
 
-## Next: Getting Test Funds! 🚰
+## Next: Getting Test Funds!
 
 In the next lesson, we'll get some free testnet NIM from the faucet to fund your wallet. Then you can start sending your first blockchain transactions!

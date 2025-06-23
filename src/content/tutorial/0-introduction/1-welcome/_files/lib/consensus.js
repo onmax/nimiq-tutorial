@@ -1,4 +1,4 @@
-import { Client, ClientConfiguration, Policy } from '@nimiq/core'
+import { Client, ClientConfiguration } from '@nimiq/core'
 
 export async function createAndConnectClient(network = 'TestAlbatross') {
   const config = new ClientConfiguration()
@@ -19,4 +19,4 @@ export async function createAndConnectClient(network = 'TestAlbatross') {
 export async function getNetworkInfo(client) {
   const headBlock = await client.getHeadBlock(true)
   return { blockHeight: headBlock.height, hash: headBlock.hash, timestamp: headBlock.timestamp, networkId: await client.getNetworkId() }
-} 
+}

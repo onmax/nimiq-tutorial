@@ -1,7 +1,7 @@
-import { createAndConnectClient } from './lib/consensus.js'
-import { createRandomWallet } from './lib/wallet.js'
-import { requestFundsFromFaucet, waitForFunds } from './lib/faucet.js'
 import { Policy, StakingContract, Transaction, TransactionReceipt } from '@nimiq/core'
+import { createAndConnectClient } from './lib/consensus.js'
+import { requestFundsFromFaucet, waitForFunds } from './lib/faucet.js'
+import { createRandomWallet } from './lib/wallet.js'
 
 async function main() {
   console.log('🚀 Starting Nimiq Staking Tutorial')
@@ -50,7 +50,7 @@ async function main() {
     Policy.coinsToLunas(0.00001),
     client.headHash,
     Transaction.Flag.NONE,
-    data
+    data,
   )
   // Sign transaction
   const signature = wallet.keyPair.sign(transaction.serializeContent())
@@ -71,9 +71,10 @@ async function main() {
     console.log('💰 Remaining balance:', Policy.lunasToCoins(newBalance), 'NIM')
     console.log('\n🎉 Congratulations! You have successfully delegated NIM to a validator!')
     console.log('📈 Your delegation will start earning rewards in the next epoch.')
-  } else {
+  }
+  else {
     console.log('❌ Transaction failed or timed out')
   }
 }
 
-main().catch(console.error) 
+main().catch(console.error)

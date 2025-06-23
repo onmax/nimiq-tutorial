@@ -9,26 +9,28 @@
  */
 export async function requestFromFaucet(address) {
   const faucetUrl = 'https://faucet.pos.nimiq-testnet.com/tapit'
-  
+
   try {
     console.log('💧 Requesting funds from faucet...')
-    
+
     const response = await fetch(faucetUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: `address=${address.toUserFriendlyAddress()}`
+      body: `address=${address.toUserFriendlyAddress()}`,
     })
-    
+
     if (response.ok) {
       console.log('✅ Faucet request successful!')
       return true
-    } else {
+    }
+    else {
       console.log('❌ Faucet request failed:', response.status)
       return false
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error('❌ Error requesting from faucet:', error.message)
     return false
   }
@@ -44,9 +46,9 @@ export async function requestFromFaucet(address) {
 export async function waitForFaucetFunds(client, address, waitTime = 5000) {
   console.log('⏳ Waiting for funds to arrive...')
   await new Promise(resolve => setTimeout(resolve, waitTime))
-  
+
   const balance = await client.getBalance(address)
   console.log('💰 Balance:', Nimiq.Policy.lunasToCoins(balance), 'NIM')
-  
+
   return balance
-} 
+}

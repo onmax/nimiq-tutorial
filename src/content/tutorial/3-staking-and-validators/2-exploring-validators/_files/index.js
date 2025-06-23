@@ -1,24 +1,32 @@
-/**
- * Nimiq Staking Tutorial - Exploring Validators
- * 
- * This lesson demonstrates how to query and explore validator information from the Nimiq network.
- */
-
-import { createAndConnectClient } from './lib/consensus.js'
-import { getActiveValidators, getStakingContract } from './lib/staking.js'
+import { calculateStakingRewards } from '@nimiq/utils/rewards-calculator'
+import { getClient } from './lib/consensus.js'
+import { getStakedSupplyRatio, getValidators } from './lib/validators-api.js'
 
 async function main() {
-  console.log('🚀 Welcome to the Validator Explorer!')
+  try {
+    const network = 'MainAlbatross'
 
-  // TODO: Connect to the network
-  // TODO: Query and display active validators
-  // TODO: Use getStakingContract if needed
+    // 1. Connect to the Nimiq Mainnet
+    const client = await getClient(network)
 
-  // TODO: Log the top 5 validators by stake
+    // 2. Define the staking contract address
+    const STAKING_CONTRACT_ADDRESS = 'NQ77 0000 0000 0000 0000 0000 0000 0000 0001'
 
-  // TODO: Calculate and display total stake and staking ratio
+    // 3. Retrieve the staking contract's account data
+    const contract = await client.getAccount(STAKING_CONTRACT_ADDRESS)
 
-  console.log('✅ Validator exploration complete!')
+    // TODO 4. Fetch additional data from Nimiq Validators API
+
+    // TODO 5. Calculate total staked supply ratio
+
+    // TODO 6. Merge on-chain and off-chain data
+
+    // TODO 7. Sort and display the final list
+    console.table(contract.activeValidators)
+  }
+  catch (error) {
+    console.error('❌ Error:', error)
+  }
 }
 
-main().catch(console.error) 
+main().catch(console.error)

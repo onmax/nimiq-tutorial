@@ -1,129 +1,109 @@
 ---
 type: lesson
-title: Exploring Validators and Staking Pool
+title: 'Exploring Validators: From Address to Identity'
 focus: /index.js
 terminal:
   panels: ['output']
 ---
 
-# Exploring Validators 🔍
+# From Address to Identity
 
-Time to meet the validators! You're about to research and explore the network participants who will help you earn staking rewards. Think of this as "validator shopping" - finding the best partner for your staking journey.
+In the last lesson, you successfully fetched a list of active validator addresses directly from the Nimiq staking contract. While this is a great first step, a raw address doesn't tell you much about a validator's performance, reliability, or community standing. How do you choose the best one to delegate your stake to?
 
-## Why Validator Selection Matters
+In this lesson, you'll level up your skills by enriching that on-chain data with valuable off-chain information from the [Nimiq Validators API](https://github.com/nimiq/validators-api). You'll learn how to combine these two data sources to create a comprehensive overview of each validator, including their name, fees, and the crucial **Validator Trust Score (VTS)**.
 
-Choosing the right validator directly impacts your staking success:
+## What You'll Learn
 
-✅ **Higher Rewards** - Performance affects your earnings  
-✅ **Reliable Payouts** - Uptime determines consistent rewards  
-✅ **Trust & Security** - Validator behavior affects your staked funds  
-✅ **Long-term Partnership** - Your chosen validator manages your stake
+- How to fetch detailed validator metadata from an external API.
+- How to calculate estimated annual staking rewards.
+- The importance of the Validator Trust Score (VTS).
+- How to merge on-chain and off-chain data to make informed decisions.
 
-## What You'll Discover
+## Your Mission: Build a Rich Validator List
 
-By exploring validators, you'll learn to evaluate:
+Your task is to create a script that fetches validator data from both the blockchain and the Nimiq Validators API, calculates potential rewards, and displays a sorted list of validators to help a user decide where to stake their NIM.
 
-✅ **Stake amounts** and voting power  
-✅ **Performance metrics** and reliability  
-✅ **Reward policies** and payout addresses  
-✅ **Validator status** and activity levels
+Let's get started!
 
-## Validator Deep Dive
+### 1. Fetching Validator Metadata
 
-Each validator has key properties that affect your staking experience:
+First, you need data from the Nimiq Validators API. The `lib/validators-api.js` file already contains a helper function, `getValidators(network)`, which handles this for you. This function returns a detailed list of all validators, including their name, description, and fees.
 
-#### Validator Address 📍
-- Unique identifier for each validator
-- What you'll use when creating your delegation transaction
-- Like a validator's "account number"
+Add this to your `index.js`:
 
-#### Stake Amount 💰
-- Total NIM staked by validator + all their stakers
-- Determines voting power and block production chances
-- Higher stake often means more frequent rewards
+```javascript
+import { getValidators } from './lib/validators-api.js'
 
-#### Reward Address 🎁
-- Where the validator receives their earned rewards
-- Can differ from their main validator address
-- Shows how they manage their earnings
+// ...
 
-#### Validator Status ⚡
-- **Active**: Currently validating and earning rewards
-- **Inactive**: Not participating (possibly penalized or offline)
-- Only stake with active validators!
+// Fetch additional data from Nimiq Validators API
+const validatorsData = await getValidators(network)
+```
 
-## The Staking Contract Hub
+### 2. Calculating Staking Rewards
 
-Nimiq uses a central **staking contract** that manages everything:
+To estimate how much you could earn by staking, you need two key pieces of information: the validator's fee and the percentage of the total NIM supply that is currently staked. A higher staked supply generally means slightly lower rewards for everyone, as the total rewards are shared among more participants.
 
-- **Single address** handles all network staking
-- **Automatic distributions** every epoch
-- **Transparent tracking** of all delegations
-- **On-chain verification** of all staking activity
+The `lib/validators-api.js` file provides another helper, `getStakedSupplyRatio(network)`, to get this value.
 
-## Nimiq Validators API: Your Research Tool
+```javascript
+import { getStakedSupplyRatio } from './lib/validators-api.js'
 
-Beyond basic network queries, the Validators API provides powerful research data:
+// ...
 
-#### **Key Endpoints** 🔗
-- `/api/v1/validators` - Complete validator list with filters
-- `/api/v1/validators/:address` - Detailed validator information  
-- `/api/v1/supply` - Network staking statistics
+const stakedSupplyRatio = await getStakedSupplyRatio(network)
+```
 
-#### **Enhanced Research Features** ⭐
-- **Validator Trust Score (VTS)** - Performance and reliability ratings
-- **Historical performance** - 9+ months of track record data
-- **Rich metadata** - Descriptions, logos, contact info, payout policies
-- **Network analytics** - Staking distribution and decentralization metrics
+With the `stakedSupplyRatio` and the validator's `fee`, you can use the `calculateStakingRewards` function from the `@nimiq/utils` package to estimate your potential earnings. This powerful utility does the heavy lifting for you.
 
-#### **API Networks** 🌐
-- **Mainnet**: `https://validators-api-mainnet.pages.dev`
-- **Testnet**: `https://validators-api-testnet.pages.dev`
+Learn more about `@nimiq/utils` in the [documentation](https://www.nimiq.com/developers/build/nimiq-utils#nimiq-utils-js).
 
-## Your Validator Research Mission
+### 3. Merging On-Chain and Off-Chain Data
 
-In this lesson, you'll become a validator detective by:
+Now it's time to combine the data. You'll map over the `activeValidators` array you retrieved from the staking contract. For each validator, you'll:
 
-1. **Connecting to the Network** 🔌 - Establish your research connection
-2. **Querying Active Validators** 👥 - See who's currently validating  
-3. **Analyzing Staking Data** 📈 - Understand total network stake
-4. **Exploring Epoch Information** ⏰ - Learn about reward cycles
+1.  Find the corresponding metadata in `validatorsData`.
+2.  Calculate their total stake in NIM.
+3.  Use `calculateStakingRewards` to estimate the yearly reward percentage.
+4.  Construct a new object with all the combined information.
 
-## What You'll Learn to Evaluate
+```javascript
+const enhancedValidators = contract.activeValidators.map(([address, balance]) => {
+  const validatorInfo = validatorsData.find(v => v.address === address) || {}
+  const totalStake = balance / 1e5 // Convert from Luna to NIM
 
-**Performance Indicators:**
-- Uptime and reliability history
-- Reward consistency and timing
-- Total stake and delegator count
+  // Estimate yearly rewards ratio
+  const { gainRatio } = calculateStakingRewards({
+    stakedSupplyRatio,
+    days: 365,
+    fee: validatorInfo.fee,
+  })
 
-**Trust Factors:**
-- Validator description and transparency
-- Contact information and communication
-- Community reputation and involvement
+  return {
+    'name': validatorInfo.name || 'N/A',
+    address,
+    'total stake (NIM)': totalStake.toFixed(2),
+    'yearly reward (%)': (gainRatio * 100).toFixed(2),
+    'fee %': validatorInfo.fee,
+    'vts': validatorInfo.score?.total || 0,
+  }
+})
+```
 
-**Economic Factors:**
-- Fee structures and payout policies
-- Stake concentration and decentralization
-- Historical reward rates
+### 4. The Validator Trust Score (VTS)
 
-## Your Staking Success Depends on This!
+You might have noticed the `vts` field. This is the **Validator Trust Score**, a metric developed by the Nimiq team to assess the reliability and performance of validators based on factors like uptime and participation in the network. A higher score indicates a more trustworthy validator. It's an essential tool for making a good staking choice. The `vts` is a value between 0 and 1.
 
-Just like choosing a bank or investment advisor, selecting the right validator is crucial for your staking success. The research you do here will directly impact:
+For a deeper dive into how the score is calculated, you can read the [official documentation](https://www.nimiq.com/developers/validators/validator-trustscore).
 
-- How much you earn in rewards
-- How reliably you receive payouts  
-- How secure your staked funds remain
-- How smooth your staking experience will be
+### 5. Sort and Display
 
-In this lesson, we'll:
+Finally, to make the list easy to read, sort it by the Validator Trust Score in descending order and print it to the console using `console.table()`. This will present the most reputable validators at the top.
 
-1. **Connect to the network** 🔌 and establish consensus
-2. **Query active validators** 👥 and display their information
-3. **Get staking contract details** 📋 and total staked amounts
-4. **Explore epoch information** ⏰ and validator statistics
+```javascript
+// Sort and display the final list
+enhancedValidators.sort((a, b) => b.vts - a.vts)
+console.table(enhancedValidators)
+```
 
-The code will help you query live validator data and make informed decisions about where to stake your NIM! 🌟
-
-## Ready to Research?
-
-Let's start exploring validators and gathering the data you need to make smart staking decisions. You're about to become a validator expert! 🔍
+Run your script, and you'll see a beautiful, informative table of Nimiq validators, ready to help you make the best staking decision.

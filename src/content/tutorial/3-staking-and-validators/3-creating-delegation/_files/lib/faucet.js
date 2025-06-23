@@ -12,9 +12,10 @@ export async function getTestnetNIM(address) {
   const response = await fetch(faucetUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: `address=${address.toUserFriendlyAddress()}`
+    body: `address=${address.toUserFriendlyAddress()}`,
   })
-  if (!response.ok) throw new Error('Faucet request failed')
+  if (!response.ok)
+    throw new Error('Faucet request failed')
   return true
 }
 
@@ -28,9 +29,9 @@ export async function getTestnetNIM(address) {
 export async function waitForFaucetFunds(client, address, waitTime = 5000) {
   console.log('⏳ Waiting for funds to arrive...')
   await new Promise(resolve => setTimeout(resolve, waitTime))
-  
+
   const balance = await client.getBalance(address)
   console.log('💰 Balance:', Nimiq.Policy.lunasToCoins(balance), 'NIM')
-  
+
   return balance
-} 
+}

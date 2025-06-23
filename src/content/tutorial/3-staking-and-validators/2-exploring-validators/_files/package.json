@@ -1,7 +1,14 @@
 {
+  "name": "nimiq-staking-tutorial",
   "type": "module",
+  "version": "1.0.0",
+  "description": "Learn about Nimiq staking and validators",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node --watch index.js"
+  },
   "dependencies": {
-    "@nimiq/core": "workspace:^",
-    "@nimiq/utils": "workspace:^"
+    "@nimiq/core": "^2.1.0",
+    "@nimiq/utils": "^0.12.4"
   }
-} 
+}

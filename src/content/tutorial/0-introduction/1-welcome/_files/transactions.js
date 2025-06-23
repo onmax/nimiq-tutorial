@@ -1,7 +1,7 @@
+import { Address, Policy, Transaction, TransactionReceipt } from '@nimiq/core'
 import { createAndConnectClient } from './lib/consensus.js'
-import { createRandomWallet } from './lib/wallet.js'
 import { requestFundsFromFaucet, waitForFunds } from './lib/faucet.js'
-import { Policy, Transaction, TransactionReceipt, Address } from '@nimiq/core'
+import { createRandomWallet } from './lib/wallet.js'
 
 async function main() {
   // Create client and connect to network
@@ -34,7 +34,7 @@ async function main() {
     Policy.coinsToLunas(1),
     Policy.coinsToLunas(0.00001),
     client.headHash,
-    Transaction.Flag.NONE
+    Transaction.Flag.NONE,
   )
   const signature = senderWallet.keyPair.sign(transaction.serializeContent())
   const proof = TransactionReceipt.singleSig(senderWallet.keyPair.publicKey, signature)
@@ -59,4 +59,4 @@ async function main() {
   }
 }
 
-main().catch(console.error) 
+main().catch(console.error)

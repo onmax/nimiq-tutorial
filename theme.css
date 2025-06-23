@@ -92,7 +92,6 @@
   --tk-elements-app-backgroundColor: var(--colors-darkblue);
   --tk-elements-app-borderColor: var(--colors-neutral-800);
 
-
   /* Panel headers */
   --tk-elements-panel-header-backgroundColor: var(--colors-neutral-1100);
   --tk-elements-panel-header-borderColor: var(--colors-neutral-300);
@@ -177,14 +176,18 @@
 
 /* Apply Nimiq typography if available */
 :root {
-  font-family: 'Muli', 'Inter', system-ui, -apple-system, sans-serif;
-} 
+  font-family:
+    'Muli',
+    'Inter',
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
 
-
-div[role="separator"]:hover::after {
+div[role='separator']:hover::after {
   background-color: color-mix(in srgb, var(--colors-neutral) 3%, transparent);
-  
+
   :root[data-theme='dark'] & {
     background-color: color-mix(in srgb, var(--colors-neutral-0) 8%, transparent);
   }
-} 
+}

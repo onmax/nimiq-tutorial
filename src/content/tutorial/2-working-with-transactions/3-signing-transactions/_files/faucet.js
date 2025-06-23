@@ -14,7 +14,7 @@ export async function requestFromFaucet(client, address) {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: `address=${address.toUserFriendlyAddress()}`
+      body: `address=${address.toUserFriendlyAddress()}`,
     })
 
     if (!response.ok) {
@@ -30,7 +30,8 @@ export async function requestFromFaucet(client, address) {
     const balance = await client.getBalance(address)
     console.log(`💰 Balance: ${balance / 1e5} NIM`)
     return true
-  } catch (error) {
+  }
+  catch (error) {
     console.error('❌ Error requesting from faucet:', error.message)
     return false
   }

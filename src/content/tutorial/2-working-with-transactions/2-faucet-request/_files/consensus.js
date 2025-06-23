@@ -1,3 +1,8 @@
+/**
+ * This file contains the functionality to connect to the Nimiq network.
+ * You can learn how we do this in the tutorial "Connecting to the Network".
+ */
+
 import { Client, ClientConfiguration } from '@nimiq/core'
 
 /**
@@ -22,7 +27,24 @@ export async function getClient(network = 'TestAlbatross') {
       '/dns4/seed4.pos.nimiq-testnet.com/tcp/8443/wss',
     ])
   }
-
+  else if (network === 'MainAlbatross') {
+    config.seedNodes([
+      '/dns4/aurora.seed.nimiq.com/tcp/443/wss',
+      '/dns4/catalyst.seed.nimiq.network/tcp/443/wss',
+      '/dns4/cipher.seed.nimiq-network.com/tcp/443/wss',
+      '/dns4/eclipse.seed.nimiq.cloud/tcp/443/wss',
+      '/dns4/lumina.seed.nimiq.systems/tcp/443/wss',
+      '/dns4/nebula.seed.nimiq.com/tcp/443/wss',
+      '/dns4/nexus.seed.nimiq.network/tcp/443/wss',
+      '/dns4/polaris.seed.nimiq-network.com/tcp/443/wss',
+      '/dns4/photon.seed.nimiq.cloud/tcp/443/wss',
+      '/dns4/pulsar.seed.nimiq.systems/tcp/443/wss',
+      '/dns4/quasar.seed.nimiq.com/tcp/443/wss',
+      '/dns4/solstice.seed.nimiq.network/tcp/443/wss',
+      '/dns4/vortex.seed.nimiq.cloud/tcp/443/wss',
+      '/dns4/zenith.seed.nimiq.systems/tcp/443/wss',
+    ])
+  }
   // Connect using pico which is faster
   // Read more at: https://www.nimiq.com/developers/learn/protocol/sync-protocol/nodes-and-sync
   config.syncMode('pico')

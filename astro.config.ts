@@ -1,5 +1,5 @@
-import tutorialkit from '@tutorialkit/astro';
-import { defineConfig } from 'astro/config';
+import tutorialkit from '@tutorialkit/astro'
+import { defineConfig } from 'astro/config'
 
 export default defineConfig({
   site: 'https://tutorial.nimiq.com',
@@ -13,4 +13,4 @@ export default defineConfig({
       },
     }),
   ],
-});
+})

@@ -1,11 +1,11 @@
 {
   "name": "nimiq-faucet-tutorial",
-  "version": "1.0.0",
   "type": "module",
+  "version": "1.0.0",
   "scripts": {
     "dev": "node --watch index.js"
   },
   "dependencies": {
     "@nimiq/core": "^2.0.0"
   }
-} 
+}

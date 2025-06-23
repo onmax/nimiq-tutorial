@@ -20,4 +20,4 @@ export async function getNetworkInfo(client) {
   const headBlock = await client.getHeadBlock(true)
   const currentEpoch = Math.floor(headBlock.height / Policy.EPOCH_LENGTH)
   return { blockHeight: headBlock.height, currentEpoch, epochLength: Policy.EPOCH_LENGTH }
-} 
+}

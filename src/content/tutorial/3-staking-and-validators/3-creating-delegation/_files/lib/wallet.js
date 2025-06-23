@@ -1,5 +1,5 @@
-import { KeyPair, Address, PrivateKey } from '@nimiq/core'
-import { readFile, writeFile } from 'fs/promises'
+import { readFile, writeFile } from 'node:fs/promises'
+import { Address, KeyPair, PrivateKey } from '@nimiq/core'
 
 /**
  * Utility functions for wallet creation and management
@@ -21,7 +21,8 @@ export async function createWallet() {
  */
 export async function getWallet() {
   const privateKeyHex = await readFile('wallet.key', 'utf-8').catch(() => null)
-  if (privateKeyHex) return KeyPair.derive(PrivateKey.fromHex(privateKeyHex))
+  if (privateKeyHex)
+    return KeyPair.derive(PrivateKey.fromHex(privateKeyHex))
   const privateKey = PrivateKey.generate()
   await writeFile('wallet.key', privateKey.toHex(), 'utf-8')
   return KeyPair.derive(privateKey)
@@ -59,14 +60,14 @@ export function createBasicTransaction(keyPair, recipient, value, fee, validityS
 /**
  * Create a wallet from existing entropy
  * @param {Uint8Array|import('@nimiq/core').PrivateKey} entropy - Existing entropy
- * @returns {Object} - Wallet object with keyPair and address
+ * @returns {object} - Wallet object with keyPair and address
  */
 export function createWalletFromEntropy(entropy) {
   const wallet = {
     keyPair: KeyPair.derive(entropy),
-    address: Address.derive(entropy)
+    address: Address.derive(entropy),
   }
-  
+
   return wallet
 }
 
@@ -80,8 +81,8 @@ export function signTransaction(transaction, keyPair) {
   const signature = Signature.create(
     keyPair.privateKey,
     keyPair.publicKey,
-    transaction.serializeContent()
+    transaction.serializeContent(),
   )
-  
+
   return new SignedTransaction(transaction, signature)
-} 
+}

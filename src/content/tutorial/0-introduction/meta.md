@@ -6,4 +6,4 @@ terminal:
   open: true
   activePanel: 0
   panels: ['terminal']
---- 
+---

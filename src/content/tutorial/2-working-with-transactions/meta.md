@@ -10,4 +10,3 @@ terminal:
   activePanel: 0
   panels: ['output']
 ---
-

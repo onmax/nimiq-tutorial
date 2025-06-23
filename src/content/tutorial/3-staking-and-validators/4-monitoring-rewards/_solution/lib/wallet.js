@@ -1,6 +1,5 @@
-import { KeyPair, Address, PrivateKey, Signature, Transaction, SignedTransaction } from '@nimiq/core'
-import { Entropy } from '@nimiq/utils'
-import { readFile, writeFile } from 'fs/promises'
+import { readFile, writeFile } from 'node:fs/promises'
+import { Address, KeyPair, PrivateKey, Signature, SignedTransaction, Transaction } from '@nimiq/core'
 
 /**
  * Utility functions for wallet creation and management
@@ -23,15 +22,15 @@ export async function createWallet() {
  * @returns {Promise<KeyPair>}
  */
 export async function getWallet() {
-    // For the tutorial, we store the private key in a file.
-    // In a real app, this would be handled by a secure wallet implementation.
-    const privateKeyHex = await readFile('wallet.key', 'utf-8').catch(() => null)
-    if (privateKeyHex) {
-        return KeyPair.derive(PrivateKey.fromHex(privateKeyHex))
-    }
-    const privateKey = PrivateKey.generate()
-    await writeFile('wallet.key', privateKey.toHex(), 'utf-8')
-    return KeyPair.derive(privateKey)
+  // For the tutorial, we store the private key in a file.
+  // In a real app, this would be handled by a secure wallet implementation.
+  const privateKeyHex = await readFile('wallet.key', 'utf-8').catch(() => null)
+  if (privateKeyHex) {
+    return KeyPair.derive(PrivateKey.fromHex(privateKeyHex))
+  }
+  const privateKey = PrivateKey.generate()
+  await writeFile('wallet.key', privateKey.toHex(), 'utf-8')
+  return KeyPair.derive(privateKey)
 }
 
 /**
@@ -66,14 +65,14 @@ export function createBasicTransaction(keyPair, recipient, value, fee, validityS
 /**
  * Create a wallet from existing entropy
  * @param {Entropy} entropy - Existing entropy
- * @returns {Object} - Wallet object with keyPair and address
+ * @returns {object} - Wallet object with keyPair and address
  */
 export function createWalletFromEntropy(entropy) {
   const wallet = {
     keyPair: KeyPair.derive(entropy),
-    address: Address.derive(entropy)
+    address: Address.derive(entropy),
   }
-  
+
   return wallet
 }
 
@@ -87,8 +86,8 @@ export function signTransaction(transaction, keyPair) {
   const signature = Signature.create(
     keyPair.privateKey,
     keyPair.publicKey,
-    transaction.serializeContent()
+    transaction.serializeContent(),
   )
-  
+
   return new SignedTransaction(transaction, signature)
-} 
+}

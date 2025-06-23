@@ -18,15 +18,17 @@ Look at the `index.js` file → You'll see we've started with the basic import:
 import { Client, ClientConfiguration } from '@nimiq/core'
 ```
 
+> Remember that if you are running this code in a browser, you will need to adapt it according to the instructions found here.
+
 By the end of this lesson, this file will:
+
 - ✅ Connect to the Nimiq testnet (a safe playground blockchain)
 - ✅ Establish consensus with thousands of other nodes worldwide
 - ✅ Show you live blockchain data in your terminal
 
-**Ready to connect to your first blockchain?** Let's do this! 💪
+**Ready to connect to your first blockchain?** Let's do this!
 
-
-## Step 1: Configure Your Client 🔧
+## Step 1: Configure Your Client
 
 First, we need to tell Nimiq how to connect. Replace the first `TODO` comment with:
 
@@ -37,13 +39,12 @@ const config = new ClientConfiguration()
 
 **What this does:** Creates a configuration object that will hold all our connection settings. Think of it like filling out a form before joining a network.
 
-
-## Step 2: Choose Your Network 🌍
+## Step 2: Choose Your Network
 
 Nimiq has two networks:
-- **TestAlbatross**: Safe playground with test tokens for learning 🧪
-- **MainAlbatross**: The production network 🖥️
 
+- `TestAlbatross`: Safe playground with test tokens for learning. The **NIM token does not have any real value**.
+- `MainAlbatross`: The production network. The NIM token has **real value**.
 
 For this tutorial, we'll use the testnet where you can experiment safely. Replace the second `TODO` comment with:
 
@@ -54,7 +55,7 @@ config.network('TestAlbatross')
 
 **What this does:** Tells your client "I want to connect to the test network where I can experiment safely!"
 
-## Step 3: Set Your Connection Points 📡
+## Step 3: Set Your Connection Points
 
 The testnet needs special connection points (seed nodes). These are like the "phone numbers" your client calls to join the network. Replace the third `TODO` comment with:
 
@@ -72,7 +73,7 @@ config.seedNodes([
 
 > 💡 **Tip:** Mainnet doesn't need this step - it has built-in seed nodes!
 
-## Step 4: Create Your Client 🎯
+## Step 4: Create Your Client
 
 Now let's turn our configuration into a working client! Replace the fourth `TODO` comment with:
 
@@ -83,7 +84,7 @@ const client = await Client.create(config.build())
 
 **What this does:** This is where the magic starts! Your client is born and ready to connect to the blockchain network.
 
-## Step 5: Establish Consensus 🤝
+## Step 5: Establish Consensus
 
 The final step - join the global network and sync with everyone else! Replace the fifth `TODO` comment with:
 
@@ -103,7 +104,7 @@ Want to make your connection even better? Add these optional configurations afte
 // Super fast sync mode
 config.syncMode('pico')
 
-// Reduce log spam in terminal  
+// Reduce log spam in terminal
 config.logLevel('error')
 ```
 
@@ -114,7 +115,7 @@ config.logLevel('error')
 When you execute this code, you'll see:
 
 1. **Connection messages** - Your client reaching out to seed nodes
-2. **Sync progress** - Downloading and verifying blockchain data  
+2. **Sync progress** - Downloading and verifying blockchain data
 3. **Consensus established** - Success! You're connected!
 4. **Your celebration message** - "🎉 Connected to Nimiq testnet!"
 
@@ -128,7 +129,3 @@ Congratulations! You just:
 - Did it all with **pure JavaScript** in seconds, not hours
 
 This is what makes Nimiq special - blockchain connections that are fast, simple, and work anywhere JavaScript runs!
-
-## Ready to Test?
-
-Run your code and watch as your application joins the global Nimiq network. You're about to see your first real blockchain connection! 🌟

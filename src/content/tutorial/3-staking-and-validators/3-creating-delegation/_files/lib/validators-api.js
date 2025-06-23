@@ -1,6 +1,6 @@
 /**
  * Nimiq Validators API Utilities
- * 
+ *
  * Minimal utilities for fetching validator data from the official API
  */
 
@@ -15,7 +15,8 @@ export async function fetchValidators(network = 'testnet') {
     : 'https://validators-api-testnet.pages.dev'
   const url = `${baseUrl}/api/v1/validators`
   const response = await fetch(url)
-  if (!response.ok) throw new Error(`API request failed: ${response.status}`)
+  if (!response.ok)
+    throw new Error(`API request failed: ${response.status}`)
   const result = await response.json()
   return result.data || []
 }
@@ -28,7 +29,7 @@ export async function fetchValidators(network = 'testnet') {
 export function getValidatorsApiUrl(network = 'testnet') {
   const baseUrls = {
     mainnet: 'https://validators-api-mainnet.pages.dev',
-    testnet: 'https://validators-api-testnet.pages.dev'
+    testnet: 'https://validators-api-testnet.pages.dev',
   }
   return baseUrls[network] || baseUrls.testnet
 }
@@ -43,18 +44,19 @@ export async function fetchValidatorsFromApi(network = 'testnet', options = {}) 
   const baseUrl = getValidatorsApiUrl(network)
   const params = new URLSearchParams(options)
   const url = `${baseUrl}/api/v1/validators${params.toString() ? `?${params.toString()}` : ''}`
-  
+
   try {
     console.log(`🌐 Fetching validators from API: ${url}`)
     const response = await fetch(url)
-    
+
     if (!response.ok) {
       throw new Error(`API request failed: ${response.status} ${response.statusText}`)
     }
-    
+
     const data = await response.json()
     return data
-  } catch (error) {
+  }
+  catch (error) {
     console.error('❌ Error fetching validators from API:', error.message)
     throw error
   }
@@ -69,18 +71,19 @@ export async function fetchValidatorsFromApi(network = 'testnet', options = {}) 
 export async function fetchValidatorFromApi(validatorAddress, network = 'testnet') {
   const baseUrl = getValidatorsApiUrl(network)
   const url = `${baseUrl}/api/v1/validators/${validatorAddress}`
-  
+
   try {
     console.log(`🌐 Fetching validator ${validatorAddress} from API`)
     const response = await fetch(url)
-    
+
     if (!response.ok) {
       throw new Error(`API request failed: ${response.status} ${response.statusText}`)
     }
-    
+
     const data = await response.json()
     return data
-  } catch (error) {
+  }
+  catch (error) {
     console.error('❌ Error fetching validator from API:', error.message)
     throw error
   }
@@ -94,18 +97,19 @@ export async function fetchValidatorFromApi(validatorAddress, network = 'testnet
 export async function fetchSupplyFromApi(network = 'testnet') {
   const baseUrl = getValidatorsApiUrl(network)
   const url = `${baseUrl}/api/v1/supply`
-  
+
   try {
     console.log(`🌐 Fetching supply information from API`)
     const response = await fetch(url)
-    
+
     if (!response.ok) {
       throw new Error(`API request failed: ${response.status} ${response.statusText}`)
     }
-    
+
     const data = await response.json()
     return data
-  } catch (error) {
+  }
+  catch (error) {
     console.error('❌ Error fetching supply from API:', error.message)
     throw error
   }
@@ -120,26 +124,27 @@ export function displayValidatorApiInfo(validatorData) {
   console.log(`📛 Name: ${validatorData.name || 'N/A'}`)
   console.log(`📍 Address: ${validatorData.address}`)
   console.log(`📝 Description: ${validatorData.description || 'N/A'}`)
-  
+
   if (validatorData.website) {
     console.log(`🌐 Website: ${validatorData.website}`)
   }
-  
+
   // Display trust score if available
   if (validatorData.trustScore !== undefined) {
     console.log(`⭐ Trust Score: ${validatorData.trustScore}`)
   }
-  
+
   // Display fee information
   if (validatorData.fee !== undefined) {
     console.log(`💰 Fee: ${(validatorData.fee * 100).toFixed(2)}%`)
-  } else if (validatorData.feeLowest !== undefined) {
+  }
+  else if (validatorData.feeLowest !== undefined) {
     console.log(`💰 Fee Range: ${(validatorData.feeLowest * 100).toFixed(2)}% - ${(validatorData.feeHighest * 100).toFixed(2)}%`)
     if (validatorData.feeDescription) {
       console.log(`   Description: ${validatorData.feeDescription}`)
     }
   }
-  
+
   // Display payout information
   if (validatorData.payoutType) {
     console.log(`💸 Payout Type: ${validatorData.payoutType}`)
@@ -150,7 +155,7 @@ export function displayValidatorApiInfo(validatorData) {
       console.log(`   Scheme: ${validatorData.payoutScheme}`)
     }
   }
-  
+
   // Display contact information
   if (validatorData.contact) {
     console.log('📞 Contact:')
@@ -171,13 +176,13 @@ export function compareValidatorData(networkValidators, apiValidators) {
   console.log('\n📊 Comparing Network vs API Data:')
   console.log(`🔗 Network validators: ${networkValidators.length}`)
   console.log(`🌐 API validators: ${apiValidators.data ? apiValidators.data.length : 'N/A'}`)
-  
+
   if (apiValidators.data) {
     // Find validators with enhanced metadata
-    const validatorsWithMetadata = apiValidators.data.filter(v => 
-      v.name || v.description || v.website || v.contact
+    const validatorsWithMetadata = apiValidators.data.filter(v =>
+      v.name || v.description || v.website || v.contact,
     )
-    
+
     console.log(`✨ Validators with enhanced metadata: ${validatorsWithMetadata.length}`)
     console.log(`📈 Metadata coverage: ${((validatorsWithMetadata.length / apiValidators.data.length) * 100).toFixed(1)}%`)
   }
@@ -188,23 +193,24 @@ export function compareValidatorData(networkValidators, apiValidators) {
  * @param {object} supplyData - Supply data from API
  */
 export function displayNetworkAnalytics(supplyData) {
-  if (!supplyData) return
-  
+  if (!supplyData)
+    return
+
   console.log('\n📈 Network Analytics:')
-  
+
   if (supplyData.totalSupply) {
     console.log(`💎 Total Supply: ${supplyData.totalSupply.toLocaleString()} NIM`)
   }
-  
+
   if (supplyData.circulatingSupply) {
     console.log(`🔄 Circulating Supply: ${supplyData.circulatingSupply.toLocaleString()} NIM`)
   }
-  
+
   if (supplyData.totalStaked) {
     console.log(`🔒 Total Staked: ${supplyData.totalStaked.toLocaleString()} NIM`)
   }
-  
+
   if (supplyData.stakingRatio) {
     console.log(`📊 Staking Ratio: ${(supplyData.stakingRatio * 100).toFixed(2)}%`)
   }
-} 
+}

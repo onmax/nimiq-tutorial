@@ -1,7 +1,7 @@
 {
   "name": "nimiq-cashlink-creator",
-  "version": "1.0.0",
   "type": "module",
+  "version": "1.0.0",
   "description": "Create your first Nimiq cashlinks",
   "main": "index.js",
   "scripts": {
@@ -10,4 +10,4 @@
   "dependencies": {
     "@nimiq/core": "latest"
   }
-} 
+}

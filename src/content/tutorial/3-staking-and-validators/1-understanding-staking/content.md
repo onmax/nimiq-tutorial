@@ -6,88 +6,117 @@ terminal:
   panels: ['output']
 ---
 
-# Understanding Staking in Nimiq! 💰
+# Staking Your NIM and Earning Rewards!
 
 Welcome to the world of Proof-of-Stake (PoS)! You're about to learn how to make your NIM work for you by participating in network security and earning rewards.
 
-## What Is Staking?
+## What You'll Learn
 
-**Staking** is like putting your money in a savings account that helps secure the blockchain:
+In this lesson, you'll understand:
+
+- **What staking is** and how it secures the Nimiq network
+- The roles of **validators and stakers**
+- How to **earn rewards** by delegating your NIM
+- How to get a list of active validators to start your staking journey
+
+## Quick Preview
+
+Here's a sneak peek at how you'll fetch the list of available validators:
+
+```javascript
+// 1. Connect to the Nimiq Mainnet
+const client = await getClient('MainAlbatross')
+
+// 2. Define the staking contract address
+const STAKING_CONTRACT_ADDRESS = 'NQ77 0000 0000 0000 0000 0000 0000 0000 0001'
+
+// 3. Retrieve the staking contract's account data
+const contract = await client.getAccount(STAKING_CONTRACT_ADDRESS)
+
+// 4. Extract and display the list of active validators
+const activeValidators = contract.activeValidators.map(([address, balance]) => ({ address, balance: `${balance / 1e5} NIM` }))
+console.table(activeValidators)
+```
+
+This simple command gives you all the information you need to choose a validator to stake with.
+
+## Key Staking Concepts
+
+Before we dive into the code, let's cover the basics.
+
+### What Is Staking?
+
+Staking is the process of locking up your NIM to help secure the network. In return, you earn rewards. It's like a savings account that also supports the blockchain.
 
 - **Lock up NIM** to participate in network validation
 - **Earn rewards** for helping secure the network
 - **Support validators** who maintain the blockchain
-- **Participate in consensus** without running your own validator
 
-## How Nimiq's PoS Works
+### Validators and Stakers
 
-Nimiq uses a **PoS** consensus mechanism where:
+- **Validators** are nodes that run the network. They process transactions and create new blocks. They are required to stake a significant amount of NIM.
+- **Stakers** (like you!) are NIM holders who delegate their tokens to a validator. You share in the validator's rewards without needing to run your own hardware.
 
-- **Validators** use staked NIM as collateral to validate transactions
-- **Block creation** is determined by stake weight and randomness
-- **Network security** comes from economic incentives rather than energy consumption
-- **Delegated participation** allows anyone to stake through validators
+### The Reward System
 
-## Key Players in Staking
+- Rewards are distributed automatically every epoch (a set period of time).
+- The more you stake, the more you earn.
+- Your rewards are also dependent on the validator's performance.
 
-#### Validators 🏛️
-- Network nodes that stake a minimum amount of NIM (typically 100,000 NIM)
-- Responsible for validating transactions and creating new blocks
-- Earn rewards based on their performance and total stake
-- Must maintain high uptime and honest behavior
+## Your Task
 
-#### Stakers 🤝
-- NIM holders who delegate their tokens to validators
-- Don't need to run validator infrastructure or meet minimum requirements
-- Share in validator rewards proportional to their delegation
-- Can start with any amount of NIM
+Now, let's get your hands dirty. Your first step into the staking world is to find out which validators are available. To do this, you will query the Nimiq blockchain for the official staking contract. Let's use the Mainnet to see some real data!
 
-## The Reward System
+### 1. Connect to Mainnet
 
-**How You Earn:**
-- **Automatic rewards** distributed each epoch (roughly every few hours)
-- **Proportional sharing** - more stake means more rewards
-- **Validator performance** affects reward amounts
-- **Compound growth** as rewards can be re-staked
+First, let's connect to the Nimiq Mainnet to work with real-world data.
 
-**Risk and Security:**
-- **Punishment protection** - validators can lose funds for bad behavior
-- **Shared risk** - stakers participate in validator penalties
+```javascript
+const client = await getClient('MainAlbatross')
+```
 
+### 2. The Staking Contract
 
-## Why Stake Your NIM?
+All staking operations in Nimiq are handled by a special smart contract called the **staking contract**. This contract holds information about validators, stakers, and their stakes.
 
-💵 **Earn Passive Income**: Receive regular NIM rewards just for holding and delegating your tokens
+To get validator information, you first need its address. The address for the main staking contract is always:
+`NQ77 0000 0000 0000 0000 0000 0000 0000 0001`
 
-🛡️ **Secure the Network**: Your stake helps protect the Nimiq blockchain from attacks
+Define it as a constant in your code:
 
-🗳️ **Network Participation**: Contribute to the decentralized consensus that makes Nimiq work
+```javascript
+const STAKING_CONTRACT_ADDRESS = 'NQ77 0000 0000 0000 0000 0000 0000 0000 0001'
+```
 
-📈 **Low Barriers to Entry**: Start staking with any amount - no expensive hardware required
+### 3. Fetching the Contract Account
 
-## Your Staking Journey
+With the address, you can use `client.getAccount()` to fetch the contract's current state. This is the same method you'd use to get any account's details.
 
-In this tutorial series, you'll master:
+```javascript
+const contract = await client.getAccount(STAKING_CONTRACT_ADDRESS)
+```
 
-✅ **Staking Concepts** 🧠 - Understanding how it all works (this lesson)
+### 4. Finding the Active Validators
 
-✅ **Validator Research** 🔍 - Finding the best validators to delegate to
+The returned `contract` object contains a wealth of information. The list of active validators is in the `activeValidators` property.
 
-✅ **Creating Stakers** 📝 - Making your first staking transaction
+The data is structured as an array of tuples, where each tuple contains the validator's address and their total stake.
 
-✅ **Monitoring Rewards** 📊 - Tracking your earnings and performance
+```javascript
+const activeValidators = contract.activeValidators
+```
 
-## What Makes This Exciting?
+### 5. Displaying the Validators
 
-Unlike traditional Proof of Work (like Bitcoin), Nimiq's Proof of Stake:
+To make the list easier to read, you can format it. The stake is in Luna (the smallest unit of NIM), so you'll want to convert it to NIM by dividing by 100,000. Using `console.table()` will give you a nicely formatted output.
 
-- **Uses 99% less energy** - environmentally friendly consensus
-- **Enables participation** without expensive mining equipment
-- **Provides steady rewards** instead of lottery-based mining
-- **Scales efficiently** as the network grows
+```javascript
+const activeValidators = contract.activeValidators.map(([address, balance]) => ({
+  address,
+  balance: `${balance / 1e5} NIM`,
+}))
 
-## Ready to Start Earning?
+console.table(formattedValidators)
+```
 
-You're about to learn how to make your NIM tokens work for you! Staking is one of the most powerful features of modern blockchains, and Nimiq makes it accessible to everyone.
-
-Let's explore the validator landscape and see who you might want to delegate to! 🌟
+Put it all together to see the list of staking partners available to you!

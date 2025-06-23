@@ -2,8 +2,9 @@
   "name": "nimiq-tutorial",
   "type": "module",
   "scripts": {
+    "dev": "node --watch index.js"
   },
   "dependencies": {
     "@nimiq/core": "latest"
   }
-} 
+}

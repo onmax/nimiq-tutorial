@@ -31,4 +31,4 @@ This will use the `src/templates/my-custom-template/` directory instead of the d
 
 - **Never delete this directory** - TutorialKit requires templates to function
 - Templates are the foundation that makes the code editor work
-- Each lesson's `_files/` directory contains only the files that differ from the template 
+- Each lesson's `_files/` directory contains only the files that differ from the template

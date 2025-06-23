@@ -10,4 +10,4 @@ async function main() {
   console.log('✅ Template loaded successfully!')
 }
 
-main().catch(console.error) 
+main().catch(console.error)

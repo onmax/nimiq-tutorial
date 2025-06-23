@@ -1,14 +1,14 @@
 {
   "name": "nimiq-tutorial-preview",
-  "version": "1.0.0",
   "type": "module",
+  "version": "1.0.0",
   "scripts": {
     "basics": "node basics.js",
     "transactions": "node transactions.js",
     "staking": "node staking.js"
   },
   "dependencies": {
-    "@nimiq/core": "^2.0.0",
+    "@nimiq/core": "^2.1.0",
     "@nimiq/utils": "^0.12.0"
   }
-} 
+}

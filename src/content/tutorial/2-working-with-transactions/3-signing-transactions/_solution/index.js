@@ -1,4 +1,4 @@
-import { KeyPair, Address, TransactionBuilder, PrivateKey } from '@nimiq/core'
+import { Address, KeyPair, PrivateKey, TransactionBuilder } from '@nimiq/core'
 import { setupConsensus } from './consensus.js'
 // import { requestFromFaucet } from './faucet.js'
 
@@ -9,9 +9,21 @@ async function main() {
     // Setup consensus (from previous lessons)
     const client = await setupConsensus()
 
-    // Generate a new wallet 🔐
+    // Get current block height
+    const headBlock = await client.getHeadBlock()
+    console.log('📊 Current block height:', headBlock.height)
 
-    // TODO: At the moment we cannot use the faucet, so we need to use a private key that has funds
+    // Get network ID
+    const networkId = await client.getNetworkId()
+    console.log('🌐 Network ID:', networkId)
+
+    // Generate a new wallet
+
+    // ⚠️ Uncomment this when the faucet is working again
+    // Get funds from faucet (from previous lessons)
+    // await requestFromFaucet(client, address)
+
+    // ⚠️ At the moment we cannot use the faucet, so we need to use a private key that has funds
     const privateKey = PrivateKey.fromHex('204aec9a093c8eb99d5136f9aa0910dd131934287035d03c7b9d5b2a6db042e3')
 
     // const privateKey = PrivateKey.generate()
@@ -21,12 +33,8 @@ async function main() {
     console.log('🎉 Wallet created!')
     console.log('📍 Address:', address.toUserFriendlyAddress())
 
-    // TODO: Uncomment this when the faucet is working again
-    // Get funds from faucet (from previous lessons)
-    // await requestFromFaucet(client, address)
-
     // Read the current balance of our account
-    const account = await client.getAccount(address.toUserFriendlyAddress());
+    const account = await client.getAccount(address.toUserFriendlyAddress())
     console.log('💰 Current balance:', account.balance / 1e5, 'NIM')
 
     // Get transaction history to find the sender of the first transaction (faucet)
@@ -40,29 +48,17 @@ async function main() {
 
     // We need to find the most recent transaction that is not from us
     const firstTx = txHistory.find(tx => tx.sender !== address.toUserFriendlyAddress())
-    const faucetAddress = Address.fromUserFriendlyAddress(firstTx.sender)
-    console.log('🔍 Faucet address found:', faucetAddress.toUserFriendlyAddress())
-
-    // Get current block height
-    const headBlock = await client.getHeadBlock()
-    console.log('📊 Current block height:', headBlock.height)
-
-    // Get network ID
-    const networkId = await client.getNetworkId()
-    console.log('🌐 Network ID:', networkId)
-
-    // Calculate amounts for each transaction (half each)
-    const halfAmount = account.balance / 2
-    console.log('💸 Sending amount per transaction:', account.balance / 2 / 1e5, 'NIM')
+    const recipientAddress = Address.fromUserFriendlyAddress(firstTx.sender)
+    console.log('🔍 Faucet address found:', recipientAddress.toUserFriendlyAddress())
 
     // Create a basic transaction sending half of the funds back to the faucet sender
     const basicTx = TransactionBuilder.newBasic(
-      address,           // sender
-      faucetAddress,     // recipient (faucet)
-      BigInt(halfAmount),        // value (half of balance)
-      0n,                // fee (0 in Nimiq!)
-      headBlock.height,     // validity start height
-      networkId          // network ID
+      address, // sender
+      recipientAddress, // recipient
+      BigInt(account.balance / 2), // value (half of balance)
+      0n, // fee (0 in Nimiq!)
+      headBlock.height, // validity start height
+      networkId, // testnet or mainnet
     )
 
     console.log('📝 Basic transaction created:')
@@ -82,17 +78,17 @@ async function main() {
     console.log('✅ Basic transaction sent! Hash:', basicTxHash.serializedTx)
 
     // Create an extended transaction with data sending the other half back
-    const message = "Nimiq is awesome!"
+    const message = 'Nimiq is awesome!'
     const messageBytes = new TextEncoder().encode(message)
 
     const extendedTx = TransactionBuilder.newBasicWithData(
-      address,           // sender
-      faucetAddress,     // recipient (faucet)
-      messageBytes,      // data
-      BigInt(halfAmount),        // value (remaining half)
-      0n,                // fee (0 in Nimiq!)
+      address, // sender
+      recipientAddress, // recipient
+      messageBytes, // data
+      BigInt(account.balance / 2), // value (remaining half)
+      0n, // fee (0 in Nimiq!)
       headBlock.height, // validity start height
-      networkId          // network ID
+      networkId, // testnet or mainnet
     )
 
     console.log('📝 Extended transaction created:')
@@ -114,14 +110,14 @@ async function main() {
     console.log('🎉 All transactions sent successfully!')
     console.log('')
     console.log('📋 Summary:')
-    console.log(`  • Basic transaction: ${halfAmount / 1e5} NIM`)
-    console.log(`  • Extended transaction: ${halfAmount / 1e5} NIM with message "${message}"`)
+    console.log(`  • Basic transaction: ${account.balance / 2 / 1e5} NIM`)
+    console.log(`  • Extended transaction: ${account.balance / 2 / 1e5} NIM with message "${message}"`)
     console.log(`  • Total sent: ${account.balance / 1e5} NIM`)
     console.log('  • Both transactions are now being processed by the network!')
-
-  } catch (error) {
+  }
+  catch (error) {
     console.error('❌ Error:', error.message)
   }
 }
 
-main() 
+main()

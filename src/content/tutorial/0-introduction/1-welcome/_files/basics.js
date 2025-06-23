@@ -19,4 +19,4 @@ async function main() {
   console.log(`🕒 Time taken: ${end - now}ms`)
 }
 
-main().catch(console.error) 
+main().catch(console.error)
