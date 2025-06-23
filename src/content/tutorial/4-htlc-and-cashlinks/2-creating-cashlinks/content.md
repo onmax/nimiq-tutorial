@@ -6,18 +6,27 @@ terminal:
   panels: ['output']
 ---
 
-# Creating Your First Cashlink 🔗💰
+# Creating Your First Cashlink 🔗
 
 Now that you understand HTLCs, let's create your first cashlink! A cashlink is essentially an HTLC wrapped in a shareable URL that contains all the information needed to claim the funds.
 
+## What You'll Build
+
+In this lesson, you'll create:
+
+✅ **Secret generator** - Secure random secrets for cashlinks  
+✅ **HTLC transaction builder** - Smart contracts that hold the funds  
+✅ **Cashlink URL creator** - Shareable links with embedded secrets  
+✅ **Claim functionality** - Code to redeem cashlinks  
+
 ## What Makes a Cashlink?
 
-A cashlink consists of:
+A cashlink consists of four key components:
 
-1. **Secret** 🔐: A random string that unlocks the funds
-2. **HTLC Transaction** 📝: Creates the contract on the blockchain
-3. **Cashlink URL** 🔗: Contains the secret and contract address
-4. **Timeout** ⏰: When the funds return to sender if unclaimed
+1. **Secret** 🔐 - A random string that unlocks the funds
+2. **HTLC Transaction** 📝 - Creates the contract on the blockchain
+3. **Cashlink URL** 🔗 - Contains the secret and contract address
+4. **Timeout** ⏰ - When the funds return to sender if unclaimed
 
 ## Cashlink URL Structure
 
@@ -32,17 +41,11 @@ Where:
 - `m=MESSAGE` is an optional message
 - `t=THEME` is an optional theme for the UI
 
-## Your First Cashlink Creator
+## Building Your Cashlink Creator
 
-In this lesson, we'll create a simple cashlink generator that:
-1. Generates a secret
-2. Creates an HTLC transaction
-3. Builds a cashlink URL
-4. Provides claiming functionality
+We'll create a cashlink generator that handles the complete flow from creation to claiming.
 
-Let's start building!
-
-## Step 1: Import Required Classes
+## Step 1: Import Required Classes 📦
 
 We need additional classes for creating transactions and handling secrets:
 
@@ -58,7 +61,7 @@ import {
 } from '@nimiq/core'
 ```
 
-## Step 2: Generate a Cashlink Secret
+## Step 2: Generate a Cashlink Secret 🔐
 
 Create a function to generate a secure random secret:
 
@@ -71,12 +74,12 @@ function generateCashlinkSecret() {
         .replace(/\//g, '_')
         .replace(/=/g, '')
     
-    console.log('🔐 Generated Secret:', secret)
+    console.log('Generated Secret:', secret)
     return secret
 }
 ```
 
-## Step 3: Create Hash from Secret
+## Step 3: Create Hash from Secret 🔒
 
 Convert the secret into a hash that will be stored in the HTLC:
 
@@ -88,18 +91,18 @@ function createHashFromSecret(secret) {
     // Create SHA-256 hash
     const hash = Hash.sha256(secretBytes)
     
-    console.log('🔗 Hash Root:', hash.toHex())
+    console.log('Hash Root:', hash.toHex())
     return hash
 }
 ```
 
-## Step 4: Create HTLC Transaction
+## Step 4: Create HTLC Transaction 📝
 
 Build the transaction that creates the HTLC contract:
 
 ```js
 async function createHTLCTransaction(senderKeyPair, recipientAddress, amount, hashRoot, timeout) {
-    console.log('📝 Creating HTLC Transaction...')
+    console.log('Creating HTLC Transaction...')
     
     const senderAddress = senderKeyPair.toAddress()
     
@@ -113,7 +116,7 @@ async function createHTLCTransaction(senderKeyPair, recipientAddress, amount, ha
         timeout: timeout
     }
     
-    console.log('🏗️ HTLC Data:', htlcData)
+    console.log('HTLC Data:', htlcData)
     
     // Build the transaction
     const transaction = new TransactionBuilder()
@@ -127,7 +130,7 @@ async function createHTLCTransaction(senderKeyPair, recipientAddress, amount, ha
     // Sign the transaction
     senderKeyPair.signTransaction(transaction)
     
-    console.log('✅ HTLC Transaction Created!')
+    console.log('HTLC Transaction Created!')
     console.log('├─ From:', senderAddress.toUserFriendlyAddress())
     console.log('├─ To HTLC:', transaction.recipient.toUserFriendlyAddress())
     console.log('├─ Amount:', amount / 1e5, 'NIM')
@@ -137,7 +140,7 @@ async function createHTLCTransaction(senderKeyPair, recipientAddress, amount, ha
 }
 ```
 
-## Step 5: Build Cashlink URL
+## Step 5: Build Cashlink URL 🔗
 
 Create the shareable cashlink URL:
 
@@ -162,18 +165,18 @@ function buildCashlinkURL(htlcAddress, secret, message = '', theme = '') {
         url += '&t=' + encodeURIComponent(theme)
     }
     
-    console.log('🔗 Cashlink URL:', url)
+    console.log('Cashlink URL:', url)
     return url
 }
 ```
 
-## Step 6: Create Complete Cashlink
+## Step 6: Create Complete Cashlink 🎯
 
 Put it all together in a main function:
 
 ```js
 async function createCashlink(senderKeyPair, amount, message = 'Enjoy your NIM!', timeoutBlocks = 1000) {
-    console.log('🚀 Creating Cashlink...\n')
+    console.log('Creating Cashlink...\n')
     
     try {
         // Step 1: Generate secret
@@ -206,8 +209,8 @@ async function createCashlink(senderKeyPair, amount, message = 'Enjoy your NIM!'
             'nimiq'
         )
         
-        console.log('\n✅ Cashlink Created Successfully!')
-        console.log('📋 Cashlink Details:')
+        console.log('\nCashlink Created Successfully!')
+        console.log('Cashlink Details:')
         console.log('├─ Amount:', amount / 1e5, 'NIM')
         console.log('├─ Message:', message)
         console.log('├─ Expires at block:', timeout)
@@ -222,7 +225,7 @@ async function createCashlink(senderKeyPair, amount, message = 'Enjoy your NIM!'
         }
         
     } catch (error) {
-        console.error('❌ Error creating cashlink:', error.message)
+        console.error('Error creating cashlink:', error.message)
         throw error
     }
 }
@@ -234,7 +237,7 @@ Create a function to claim an existing cashlink:
 
 ```js
 async function claimCashlink(cashlinkURL, claimerKeyPair) {
-    console.log('💰 Attempting to claim cashlink...')
+    console.log('Attempting to claim cashlink...')
     
     try {
         // Parse the URL to extract parameters
@@ -246,7 +249,7 @@ async function claimCashlink(cashlinkURL, claimerKeyPair) {
         const secret = params.get('s')
         const message = params.get('m')
         
-        console.log('📋 Cashlink Info:')
+        console.log('Cashlink Info:')
         console.log('├─ HTLC Address:', htlcAddress)
         console.log('├─ Message:', message || 'No message')
         console.log('└─ Secret:', secret ? 'Found' : 'Missing')
@@ -262,14 +265,14 @@ async function claimCashlink(cashlinkURL, claimerKeyPair) {
             throw new Error('Address is not an HTLC contract')
         }
         
-        console.log('🎯 Found HTLC Contract:')
+        console.log('Found HTLC Contract:')
         console.log('├─ Balance:', htlcAccount.balance / 1e5, 'NIM')
         console.log('├─ Timeout:', htlcAccount.timeout)
         console.log('└─ Hash Root:', htlcAccount.hashRoot)
         
-        // TODO: Create claim transaction (requires more complex proof creation)
-        console.log('🚧 Claim transaction creation would go here')
-        console.log('(This requires creating proper HTLC proofs with the secret)')
+        // Note: Creating claim transaction requires proper HTLC proof creation
+        console.log('Claim transaction creation would go here')
+        console.log('(This requires creating proper HTLC proofs with the preimage)')
         
         return {
             htlcAccount,
@@ -278,7 +281,7 @@ async function claimCashlink(cashlinkURL, claimerKeyPair) {
         }
         
     } catch (error) {
-        console.error('❌ Error claiming cashlink:', error.message)
+        console.error('Error claiming cashlink:', error.message)
         throw error
     }
 }
@@ -290,14 +293,14 @@ Add a test function to demonstrate the complete flow:
 
 ```js
 async function testCashlinkFlow() {
-    console.log('🧪 Testing Cashlink Flow...\n')
+    console.log('Testing Cashlink Flow...\n')
     
     // Generate a test wallet
     const senderPrivateKey = PrivateKey.generate()
     const senderKeyPair = KeyPair.derive(senderPrivateKey)
     
-    console.log('👤 Sender Address:', senderKeyPair.toAddress().toUserFriendlyAddress())
-    console.log('💰 Creating 1 NIM cashlink...\n')
+    console.log('Sender Address:', senderKeyPair.toAddress().toUserFriendlyAddress())
+    console.log('Creating 1 NIM cashlink...\n')
     
     try {
         // Create a cashlink for 1 NIM
@@ -308,40 +311,59 @@ async function testCashlinkFlow() {
             1000 // 1000 blocks timeout
         )
         
-        console.log('\n🔗 Your cashlink is ready!')
+        console.log('\nYour cashlink is ready!')
         console.log('Share this URL:', cashlink.url)
         
         // Simulate claiming (without actually sending transactions)
-        console.log('\n🎭 Simulating claim...')
+        console.log('\nSimulating claim...')
         await claimCashlink(cashlink.url, senderKeyPair)
         
     } catch (error) {
-        console.error('❌ Test failed:', error.message)
+        console.error('Test failed:', error.message)
     }
 }
+
+// Execute the test
+testCashlinkFlow()
 ```
 
-## Key Concepts Learned
+## Key Concepts
 
-- **Secret Generation**: Creating secure random secrets for cashlinks
-- **Hash Creation**: Converting secrets to hashes for HTLC storage
-- **Transaction Building**: Constructing HTLC creation transactions
-- **URL Encoding**: Building shareable cashlink URLs
-- **Parameter Parsing**: Extracting information from cashlink URLs
+You've learned how to:
+
+- **Generate secrets** - Create secure random strings for cashlinks
+- **Hash preimages** - Convert secrets to hashes for HTLC storage  
+- **Build transactions** - Construct HTLC creation transactions
+- **Encode URLs** - Build shareable cashlink URLs with parameters
+- **Parse cashlinks** - Extract information from cashlink URLs
 
 ## Security Considerations
 
-- **Secret Strength** 🔒: Always use cryptographically secure random secrets
-- **URL Sharing** 📤: Anyone with the URL can claim the funds
-- **Timeout Management** ⏰: Set appropriate expiration times
-- **Network Fees** 💸: Consider transaction fees for both creation and claiming
+When working with cashlinks, remember:
+
+#### Secret Management 🔒
+- Always use cryptographically secure random secrets
+- Never reuse secrets across different cashlinks
+- Store secrets securely until claimed
+
+#### URL Sharing 📤  
+- Anyone with the URL can claim the funds
+- Share cashlinks through secure channels when possible
+- Consider shorter expiration times for sensitive amounts
+
+#### Timeout Management ⏰
+- Set appropriate expiration times based on use case
+- Account for network congestion when setting timeouts
+- Remember that expired funds return to the sender
+
 
 ## Next Steps
 
-In the next lesson, we'll implement a complete cashlink generator with:
+In the next lesson, we'll build a complete cashlink generator with a user interface that handles:
+
 - Proper HTLC address calculation
-- Real transaction sending
+- Real transaction broadcasting  
 - Claim transaction creation
 - Error handling and validation
 
-> 💡 **Note**: This lesson demonstrates concepts. Real cashlink creation requires proper HTLC address calculation and transaction handling. 
+Understanding these concepts prepares you for building production cashlink applications!

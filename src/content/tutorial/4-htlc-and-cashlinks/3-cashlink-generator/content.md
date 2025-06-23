@@ -8,30 +8,31 @@ terminal:
 
 # Building a Complete Cashlink Generator 🏗️
 
-Now let's build a production-ready cashlink generator inspired by the [Nimiq Cashlink Generator](https://github.com/nimiq/cashlink-generator). This will be a comprehensive tool that can create, fund, and manage cashlinks.
+Now let's build a production-ready cashlink generator inspired by the [Nimiq Cashlink Generator](https://github.com/nimiq/cashlink-generator). This comprehensive tool can create, fund, and manage multiple cashlinks efficiently.
 
-## What We'll Build
+## What You'll Build
 
-Our cashlink generator will:
+Our cashlink generator will include:
 
-1. **Generate Cashlinks** 🔗: Create multiple cashlinks from a master secret
-2. **Fund Cashlinks** 💰: Send NIM to the HTLC contracts
-3. **Export Data** 📋: Save cashlink information to CSV
-4. **Create QR Codes** 📱: Generate QR codes for easy sharing
-5. **Manage Timeouts** ⏰: Handle expiration and reclaim funds
+✅ **Master secret system** 🔐 - Generate multiple cashlinks from one secret  
+✅ **Batch processing** 📦 - Create and fund cashlinks in groups  
+✅ **CSV export/import** 📋 - Manage cashlinks with spreadsheet data  
+✅ **Statistics tracking** 📊 - Monitor cashlink status and values  
+✅ **Error handling** 🛡️ - Graceful failure management  
 
 ## Architecture Overview
 
 The generator uses a **master secret** approach where:
-- All cashlinks are derived from a single master secret
-- Each cashlink gets a unique token for identification
+- All cashlinks derive from a single master secret
+- Each cashlink gets a unique token for identification  
 - The master secret can regenerate all cashlinks if needed
+- This provides both security and manageability at scale
 
-## Your Complete Cashlink Generator
+## Building Your Generator
 
-Let's build this step by step, starting with the core utilities.
+Let's create this step by step, starting with the core utilities.
 
-## Step 1: Master Secret and Token Generation
+## Step 1: Master Secret and Token Generation 🔑
 
 Create a master secret system for generating cashlinks:
 
@@ -61,7 +62,7 @@ function generateMasterSecret() {
         .replace(/\//g, '_')
         .replace(/=/g, '')
     
-    console.log('🔐 Master Secret Generated:', MASTER_SECRET.substring(0, 20) + '...')
+    console.log('Master Secret Generated:', MASTER_SECRET.substring(0, 20) + '...')
     return MASTER_SECRET
 }
 
@@ -76,7 +77,7 @@ function generateToken() {
 }
 ```
 
-## Step 2: Cashlink Derivation
+## Step 2: Cashlink Derivation 🧮
 
 Create cashlinks from the master secret and token:
 
@@ -105,7 +106,7 @@ function createCashlinkFromToken(token, value, message = '', timeout = 1000) {
     const secretBytes = new TextEncoder().encode(secret)
     const hashRoot = Hash.sha256(secretBytes)
     
-    console.log(`🔗 Creating cashlink with token: ${token}`)
+    console.log(`Creating cashlink with token: ${token}`)
     console.log(`├─ Value: ${value / 1e5} NIM`)
     console.log(`├─ Message: ${message}`)
     console.log(`└─ Secret: ${secret.substring(0, 10)}...`)
@@ -121,7 +122,7 @@ function createCashlinkFromToken(token, value, message = '', timeout = 1000) {
 }
 ```
 
-## Step 3: HTLC Address Calculation
+## Step 3: HTLC Address Calculation 📍
 
 Calculate the HTLC contract address before creating the transaction:
 
@@ -155,7 +156,7 @@ async function createHTLCTransaction(senderKeyPair, cashlinkData, currentBlockHe
         timeout
     )
     
-    console.log(`📝 Creating HTLC transaction for ${cashlinkData.token}`)
+    console.log(`Creating HTLC transaction for ${cashlinkData.token}`)
     console.log(`├─ HTLC Address: ${htlcAddress}`)
     console.log(`├─ Timeout: Block ${timeout}`)
     console.log(`└─ Hash Root: ${cashlinkData.hashRoot}`)
@@ -190,13 +191,13 @@ async function createHTLCTransaction(senderKeyPair, cashlinkData, currentBlockHe
 }
 ```
 
-## Step 4: Batch Cashlink Generation
+## Step 4: Batch Cashlink Generation 📦
 
 Create multiple cashlinks at once:
 
 ```js
 async function generateCashlinks(count, valuePerCashlink, message = 'Enjoy your NIM!', timeoutBlocks = 1000) {
-    console.log(`🚀 Generating ${count} cashlinks...`)
+    console.log(`Generating ${count} cashlinks...`)
     console.log(`├─ Value per cashlink: ${valuePerCashlink / 1e5} NIM`)
     console.log(`├─ Message: ${message}`)
     console.log(`└─ Timeout: ${timeoutBlocks} blocks\n`)
@@ -227,10 +228,10 @@ async function generateCashlinks(count, valuePerCashlink, message = 'Enjoy your 
             createdAt: new Date().toISOString()
         })
         
-        console.log(`✅ Generated cashlink ${i + 1}/${count}: ${token}`)
+        console.log(`Generated cashlink ${i + 1}/${count}: ${token}`)
     }
     
-    console.log(`\n🎉 Generated ${count} cashlinks successfully!`)
+    console.log(`\nGenerated ${count} cashlinks successfully!`)
     return cashlinks
 }
 
@@ -246,13 +247,13 @@ function buildCashlinkURL(htlcAddress, secret, message = '', theme = 'nimiq') {
 }
 ```
 
-## Step 5: CSV Export and Management
+## Step 5: CSV Export and Management 📋
 
 Export cashlinks to CSV for management:
 
 ```js
 function exportCashlinksToCSV(cashlinks, filename = 'cashlinks.csv') {
-    console.log(`📋 Exporting ${cashlinks.length} cashlinks to ${filename}...`)
+    console.log(`Exporting ${cashlinks.length} cashlinks to ${filename}...`)
     
     // CSV header
     const header = 'token,secret,htlc_address,url,value_nim,message,timeout,funded,claimed,created_at'
@@ -277,16 +278,16 @@ function exportCashlinksToCSV(cashlinks, filename = 'cashlinks.csv') {
     
     try {
         writeFileSync(filename, csvContent, 'utf8')
-        console.log(`✅ Exported to ${filename}`)
+        console.log(`Exported to ${filename}`)
         return filename
     } catch (error) {
-        console.error(`❌ Export failed: ${error.message}`)
+        console.error(`Export failed: ${error.message}`)
         throw error
     }
 }
 
 function importCashlinksFromCSV(filename) {
-    console.log(`📥 Importing cashlinks from ${filename}...`)
+    console.log(`Importing cashlinks from ${filename}...`)
     
     try {
         const csvContent = readFileSync(filename, 'utf8')
@@ -309,22 +310,22 @@ function importCashlinksFromCSV(filename) {
             }
         })
         
-        console.log(`✅ Imported ${cashlinks.length} cashlinks`)
+        console.log(`Imported ${cashlinks.length} cashlinks`)
         return cashlinks
     } catch (error) {
-        console.error(`❌ Import failed: ${error.message}`)
+        console.error(`Import failed: ${error.message}`)
         throw error
     }
 }
 ```
 
-## Step 6: Funding Cashlinks
+## Step 6: Funding Cashlinks 💰
 
 Fund the generated cashlinks:
 
 ```js
 async function fundCashlinks(cashlinks, senderKeyPair, batchSize = 10) {
-    console.log(`💰 Funding ${cashlinks.length} cashlinks...`)
+    console.log(`Funding ${cashlinks.length} cashlinks...`)
     console.log(`├─ Batch size: ${batchSize}`)
     console.log(`└─ Sender: ${senderKeyPair.toAddress().toUserFriendlyAddress()}\n`)
     
@@ -333,7 +334,7 @@ async function fundCashlinks(cashlinks, senderKeyPair, batchSize = 10) {
     
     for (let i = 0; i < cashlinks.length; i += batchSize) {
         const batch = cashlinks.slice(i, i + batchSize)
-        console.log(`📦 Processing batch ${Math.floor(i / batchSize) + 1}...`)
+        console.log(`Processing batch ${Math.floor(i / batchSize) + 1}...`)
         
         for (const cashlink of batch) {
             try {
@@ -345,7 +346,7 @@ async function fundCashlinks(cashlinks, senderKeyPair, batchSize = 10) {
                 )
                 
                 // In a real implementation, you would send the transaction here
-                console.log(`✅ Prepared funding for ${cashlink.token}`)
+                console.log(`Prepared funding for ${cashlink.token}`)
                 console.log(`   HTLC: ${htlcTransaction.htlcAddress}`)
                 
                 // Mark as funded (in real implementation, wait for confirmation)
@@ -356,7 +357,7 @@ async function fundCashlinks(cashlinks, senderKeyPair, batchSize = 10) {
                 fundedCashlinks.push(cashlink)
                 
             } catch (error) {
-                console.error(`❌ Failed to fund ${cashlink.token}: ${error.message}`)
+                console.error(`Failed to fund ${cashlink.token}: ${error.message}`)
             }
         }
         
@@ -364,7 +365,7 @@ async function fundCashlinks(cashlinks, senderKeyPair, batchSize = 10) {
         await new Promise(resolve => setTimeout(resolve, 1000))
     }
     
-    console.log(`\n🎉 Funding Complete!`)
+    console.log(`\nFunding Complete!`)
     console.log(`├─ Funded: ${fundedCashlinks.length}/${cashlinks.length}`)
     console.log(`└─ Total Value: ${totalValue / 1e5} NIM`)
     
@@ -372,7 +373,7 @@ async function fundCashlinks(cashlinks, senderKeyPair, batchSize = 10) {
 }
 ```
 
-## Step 7: Complete Generator Interface
+## Step 7: Complete Generator Interface 🏗️
 
 Create a main interface to use the generator:
 
@@ -384,9 +385,9 @@ class CashlinkGenerator {
     }
     
     async init() {
-        console.log('🚀 Initializing Cashlink Generator...')
+        console.log('Initializing Cashlink Generator...')
         this.masterSecret = generateMasterSecret()
-        console.log('✅ Generator ready!')
+        console.log('Generator ready!')
     }
     
     async generate(count, valuePerCashlink, message = 'Enjoy your NIM!', timeoutBlocks = 1000) {
@@ -425,7 +426,7 @@ class CashlinkGenerator {
 
 // Demo usage
 async function runCashlinkGenerator() {
-    console.log('🎯 Running Cashlink Generator Demo...\n')
+    console.log('Running Cashlink Generator Demo...\n')
     
     try {
         // Initialize generator
@@ -433,15 +434,15 @@ async function runCashlinkGenerator() {
         await generator.init()
         
         // Generate cashlinks
-        console.log('\n📝 Generating 5 cashlinks...')
+        console.log('\nGenerating 5 cashlinks...')
         await generator.generate(5, 0.1 * 1e5, 'Welcome to Nimiq!', 1000)
         
         // Export to CSV
-        console.log('\n💾 Exporting cashlinks...')
+        console.log('\nExporting cashlinks...')
         generator.export('demo_cashlinks.csv')
         
         // Show statistics
-        console.log('\n📊 Statistics:')
+        console.log('\nStatistics:')
         const stats = generator.getStats()
         console.log(`├─ Total Cashlinks: ${stats.total}`)
         console.log(`├─ Funded: ${stats.funded}`)
@@ -450,7 +451,7 @@ async function runCashlinkGenerator() {
         console.log(`└─ Total Value: ${stats.totalValue} NIM`)
         
         // Show sample cashlinks
-        console.log('\n🔗 Sample Cashlinks:')
+        console.log('\nSample Cashlinks:')
         generator.getCashlinks().slice(0, 3).forEach((cashlink, index) => {
             console.log(`${index + 1}. Token: ${cashlink.token}`)
             console.log(`   URL: ${cashlink.url}`)
@@ -458,34 +459,61 @@ async function runCashlinkGenerator() {
         })
         
     } catch (error) {
-        console.error('❌ Generator failed:', error.message)
+        console.error('Generator failed:', error.message)
     }
 }
+
+// Execute the demo
+runCashlinkGenerator()
 ```
 
-## Key Features Implemented
+## Key Features
 
-- **Master Secret System** 🔐: Derive all cashlinks from one secret
-- **Token-based Generation** 🏷️: Unique tokens for each cashlink
-- **Batch Processing** 📦: Handle multiple cashlinks efficiently
-- **CSV Export/Import** 📋: Manage cashlinks with spreadsheets
-- **Funding Management** 💰: Fund cashlinks in batches
-- **Statistics** 📊: Track cashlink status and values
+You've built a comprehensive cashlink generator with:
 
-## Security Best Practices
+- **Master secret system** 🔐 - Derive all cashlinks from one secret
+- **Token-based generation** 🏷️ - Unique tokens for each cashlink  
+- **Batch processing** 📦 - Handle multiple cashlinks efficiently
+- **CSV export/import** 📋 - Manage cashlinks with spreadsheets
+- **Funding management** 💰 - Fund cashlinks in batches
+- **Statistics tracking** 📊 - Monitor cashlink status and values
 
-- **Master Secret Storage** 🔒: Store master secret securely
-- **Token Uniqueness** 🆔: Ensure each token is unique
-- **Timeout Management** ⏰: Set appropriate expiration times
-- **Transaction Fees** 💸: Account for network fees
-- **Error Handling** 🛡️: Graceful failure handling
+## Security Considerations
+
+When deploying this generator, remember:
+
+#### Master Secret Management 🔒
+- Store the master secret securely and offline when possible
+- Never expose the master secret in logs or error messages
+- Consider using hardware security modules for production
+
+#### Token Uniqueness 🆔  
+- Ensure each token is cryptographically unique
+- Implement collision detection for token generation
+- Use sufficient entropy for token creation
+
+#### Operational Security ⏰
+- Set appropriate timeout values based on use case
+- Account for network fees in funding calculations  
+- Implement proper error handling and recovery
+
+## Production Considerations
+
+For real-world deployment:
+
+- **Transaction broadcasting** - Integrate with actual Nimiq client
+- **Confirmation waiting** - Wait for transaction confirmations
+- **Error recovery** - Handle network failures gracefully
+- **Monitoring** - Track cashlink usage and expiration
+- **Backup systems** - Secure master secret backups
 
 ## Next Steps
 
-In the final lesson, we'll add:
-- QR code generation for easy sharing
-- Web interface for the generator
-- Real transaction sending
-- Cashlink claiming functionality
+This generator provides a solid foundation for creating production cashlinks. Key areas for enhancement include:
 
-> 💡 **Note**: This generator provides a solid foundation for creating production cashlinks. Always test thoroughly on testnet first! 
+- QR code generation for easy sharing
+- Web interface for non-technical users  
+- Real-time transaction monitoring
+- Automated expiration handling
+
+Always test thoroughly on testnet before production deployment! 
