@@ -91,7 +91,7 @@ async function createAndSendHTLC(client, keyPair, hashRoot, value) {
   const txHash = await client.sendTransaction(transaction)
   console.log('🚀 Sent HTLC transaction! Hash:', txHash)
 
-  return { htlcAddress, txHash }
+  return htlcAddress
 }
 
 /**
@@ -113,16 +113,15 @@ function buildCashlinkURL(htlcAddress, secret, message, network = 'TestAlbatross
 async function main() {
   try {
     const client = await setupConsensus()
-    // Generate a random keyPair for the cashlink (claim keypair)
-    const keyPair = CryptoUtils.keyPairFromPrivateKey(CryptoUtils.getRandomValues(32))
+    const keyPair = await getFundedWallet(client)
 
     // Generate cashlink components
     const secret = generateCashlinkSecret()
     const hashRoot = createHashFromSecret(secret)
 
     // Create and fund the HTLC with 1 NIM
-    const value = 100000 // 1 NIM in Luna
-    const { htlcAddress } = await createAndSendHTLC(client, keyPair, hashRoot, value)
+    const value = 1e5 // 1 NIM in Luna
+    const htlcAddress = await createAndSendHTLC(client, keyPair, hashRoot, value)
 
     // Build the cashlink URL
     const url = buildCashlinkURL(htlcAddress, secret, 'Enjoy your NIM!')
@@ -130,7 +129,8 @@ async function main() {
     console.log('\n🎉 Cashlink created successfully!')
     console.log(`Value: ${value / 1e5} NIM`)
     console.log('HTLC Address:', htlcAddress)
-    console.log(`\n\n 👉 Share or open this URL with someone to let them claim the funds!\n${url}\n\n`)
+    console.log(`\n\n 👉 Share or open this URL with someone to let them claim the funds!\n${url}\n`)
+    console.log('⏳ If unclaimed within ~5 minutes, the funds return to the faucet.')
   }
   catch (error) {
     console.error('❌ Error:', error.message)
