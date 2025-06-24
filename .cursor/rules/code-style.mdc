@@ -1,0 +1,35 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Principles for Writing Tutorial Code
+
+- Write minimal, focused code for each step; avoid including unrelated logic.
+- Use clear, descriptive variable and function names.
+- Add explicit comments before each logical block to explain its purpose.
+- Use progressive enhancement: start simple, then add features step by step.
+- Factor out reusable logic (e.g., consensus setup) into separate functions or files.
+- Always include error handling (try/catch) and user-friendly error messages.
+- Log key actions and results to the console for immediate feedback.
+- Use consistent patterns: setup, execute, log/verify, summarize.
+- Prefer async/await for asynchronous operations.
+- Avoid hardcoding sensitive data; use environment variables or configuration where appropriate.
+- When using testnet or demo keys, clearly comment that they are for learning only.
+
+# Example
+
+```js
+// Setup consensus with the testnet
+const client = await getClient()
+
+// Generate a new wallet
+const privateKey = PrivateKey.generate()
+const keyPair = KeyPair.derive(privateKey)
+const address = keyPair.toAddress()
+console.log('📍 Address:', address.toUserFriendlyAddress())
+
+// Check wallet balance
+const account = await client.getAccount(address.toUserFriendlyAddress())
+console.log('💰 Balance:', account.balance / 1e5, 'NIM')
+```

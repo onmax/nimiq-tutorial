@@ -1,0 +1,27 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Principles for Writing Tutorial Content
+
+- Structure lessons as clear, incremental steps; each step should build on the previous and lead to a tangible outcome.
+- Use concise, jargon-free language; explain technical terms with analogies or real-world context.
+- Always provide actionable instructions and immediate feedback (e.g., console output, result screenshots).
+- Emphasize safety, experimentation, and learning by using testnets and warning about real-world risks.
+- Summarize what was achieved at the end of each lesson and preview the next step.
+- Use bullet points, headings, and code blocks for clarity.
+- Avoid unnecessary repetition; keep content focused and relevant to the current learning objective.
+- When referencing code, explain what each part does and why it matters.
+- Encourage curiosity and experimentation; highlight what learners can try on their own.
+
+# Example
+
+> "Let's check your wallet balance:
+>
+> ```js
+> const account = await client.getAccount(address.toUserFriendlyAddress())
+> console.log('💰 Balance:', account.balance / 1e5, 'NIM')
+> ```
+>
+> This code queries the blockchain for your account's balance. You should see the testnet NIM you received from the faucet!"

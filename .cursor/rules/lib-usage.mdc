@@ -1,0 +1,26 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Principles for Utility (`lib`) Folder Usage
+
+- Move any reusable logic, setup, or utility functions that are not the main focus of a lesson into the `lib` folder (or a dedicated utility file).
+- If a concept (e.g., consensus setup, faucet requests) is already explained in the written content, abstract its implementation into `lib` and import it where needed.
+- Keep the main tutorial files focused on the current learning objective; avoid cluttering them with setup or repeated code.
+- Do not move code that is unique to a single lesson or is the primary subject of the lesson (e.g., transaction creation, wallet setup) into `lib`.
+- Encapsulate all direct Nimiq Web Client setup (client creation, consensus establishment) in a utility function (e.g., `setupConsensus`), and use this function in all lessons unless the lesson is about client setup itself.
+- Encapsulate all testnet-specific utilities (e.g., faucet requests) in `lib` and document their usage.
+- When using the Nimiq Web Client, always prefer using the utility functions from `lib` for setup and common tasks, and only write direct client code in the main file if it is the focus of the lesson.
+- Keep utility functions well-documented and focused; avoid mixing unrelated logic.
+
+# Example
+
+```js
+// In lib/consensus.js
+export async function setupConsensus() { /* ... */ }
+
+// In main tutorial file
+import { setupConsensus } from './lib/consensus.js'
+const client = await setupConsensus()
+```
