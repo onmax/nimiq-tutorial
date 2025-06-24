@@ -1,6 +1,6 @@
 ---
 type: part
-title: HTLC and Cashlinks
+title: Miscellaneous
 previews: false
 prepareCommands:
   - npm install
