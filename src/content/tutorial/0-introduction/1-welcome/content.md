@@ -136,6 +136,10 @@ The code you write here will work with any JavaScript environment, including Nod
 - 📖 [Complete Nimiq Documentation](https://nimiq.dev)
 - 🌐 [Learn more about Nimiq](https://nimiq.com)
 
+## Bugs, Feedback and Ideas
+
+If you find something not working or any kind of feedback, please click `Feedback & Bugs` and let us know how we can improve this Tutorial.
+
 ---
 
 **Ready to build your first blockchain app?**

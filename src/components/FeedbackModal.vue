@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { ref, watch, nextTick, onUnmounted } from 'vue'
-import {
-  DialogRoot,
-  DialogTrigger,
-  DialogPortal,
-  DialogOverlay,
-  DialogContent,
-  DialogTitle,
-  DialogDescription,
-  DialogClose,
-} from 'reka-ui'
 import type { WidgetInstance } from '../types/feedback-widget'
+import {
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogOverlay,
+  DialogPortal,
+  DialogRoot,
+  DialogTitle,
+  DialogTrigger,
+} from 'reka-ui'
+import { nextTick, onUnmounted, ref, watch } from 'vue'
 
 const widgetContainer = ref<HTMLDivElement>()
 const isWidgetLoaded = ref(false)
@@ -26,7 +26,8 @@ const open = ref(false)
 
 // Step 1: Load CSS with preload and fallback
 function loadWidgetCss() {
-  if (document.getElementById('nimiq-feedback-css')) return
+  if (document.getElementById('nimiq-feedback-css'))
+    return
   cssLink = document.createElement('link')
   cssLink.id = 'nimiq-feedback-css'
   cssLink.rel = 'preload'
@@ -50,8 +51,10 @@ function loadWidgetCss() {
 // Step 2: Load JS with defer
 function loadWidgetScript() {
   return new Promise<void>((resolve, reject) => {
-    if (typeof window.mountFeedbackWidget === 'function') return resolve()
-    if (document.getElementById('nimiq-feedback-js')) return resolve()
+    if (typeof window.mountFeedbackWidget === 'function')
+      return resolve()
+    if (document.getElementById('nimiq-feedback-js'))
+      return resolve()
     script = document.createElement('script')
     script.id = 'nimiq-feedback-js'
     script.src = `${FEEDBACK_DOMAIN}/widget.js`
@@ -66,7 +69,8 @@ function loadWidgetScript() {
 // Step 3: Mount the widget after scripts are loaded
 async function mountWidget() {
   await nextTick()
-  if (!widgetContainer.value) return
+  if (!widgetContainer.value)
+    return
   try {
     widgetInstance.value = window.mountFeedbackWidget('#feedback-widget', {
       app: 'nimiq-tutorial',
@@ -80,18 +84,13 @@ async function mountWidget() {
     })
     widgetInstance.value.communication?.on('form-submitted', (data) => {
       console.log('Feedback submitted successfully:', data)
-      setTimeout(() => { open.value = false }, 2000)
+      setTimeout(() => open.value = false, 2000)
     })
     widgetInstance.value.communication?.on('form-error', (error) => {
       console.error('Feedback submission error:', error)
     })
-    widgetInstance.value.communication?.on('before-submit', ({ formData, type, app }) => {
-      formData.append('debugInfo', JSON.stringify({ userAgent: navigator.userAgent, url: window.location.href, timestamp: new Date().toISOString() }))
-    })
-    setTimeout(() => {
-      widgetInstance.value?.showFormGrid()
-    }, 100)
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Failed to initialize feedback widget:', error)
     showFallbackForm.value = true
   }
@@ -99,7 +98,10 @@ async function mountWidget() {
 
 function cleanupWidget() {
   if (widgetInstance.value) {
-    try { widgetInstance.value.destroy() } catch {}
+    try {
+      widgetInstance.value.destroy()
+    }
+    catch {}
     widgetInstance.value = undefined
   }
 }
@@ -117,16 +119,20 @@ function retryWidgetLoad() {
 
 watch(open, async (newValue) => {
   if (newValue) {
+    document.body.style.overflow = 'hidden'
     showFallbackForm.value = false
     loadWidgetCss()
     try {
       await loadWidgetScript()
       isWidgetLoaded.value = true
-    } catch {
+    }
+    catch {
       isWidgetLoaded.value = false
       showFallbackForm.value = true
     }
-  } else {
+  }
+  else {
+    document.body.style.overflow = ''
     cleanupWidget()
     showFallbackForm.value = false
     isWidgetLoaded.value = false
@@ -134,13 +140,16 @@ watch(open, async (newValue) => {
 }, { immediate: false })
 
 watch([isWidgetLoaded, open], async ([loaded, modalOpen]) => {
-  if (loaded && modalOpen) await mountWidget()
+  if (loaded && modalOpen)
+    await mountWidget()
 })
 
 onUnmounted(() => {
   cleanupWidget()
-  if (typeof cssLink !== 'undefined' && document.head.contains(cssLink)) document.head.removeChild(cssLink)
-  if (typeof script !== 'undefined' && document.head.contains(script)) document.head.removeChild(script)
+  if (typeof cssLink !== 'undefined' && document.head.contains(cssLink))
+    document.head.removeChild(cssLink)
+  if (typeof script !== 'undefined' && document.head.contains(script))
+    document.head.removeChild(script)
 })
 </script>
 
@@ -155,47 +164,47 @@ onUnmounted(() => {
       </Transition>
       <Transition name="modal">
         <DialogContent
-          class="fixed bottom-0 left-0 right-0 lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2 rounded-t-2xl lg:rounded-2xl z-50 h-max max-h-[85vh] w-full transform overflow-y-auto outline-none shadow-lg lg:max-w-[500px] modal-container"
+          class="modal-container fixed bottom-0 left-0 right-0 z-50 h-max max-h-[85vh] w-full transform overflow-y-auto rounded-t-2xl shadow-lg outline-none lg:left-1/2 lg:top-1/2 lg:max-w-[500px] lg:rounded-2xl lg:-translate-x-1/2 lg:-translate-y-1/2"
           @open-auto-focus.prevent
         >
-          <div class="relative bg-white dark:bg-neutral-900 py-8 ring-1 ring-neutral-200 dark:ring-neutral-800">
-            <DialogTitle class="mb-3 px-6 text-center text-neutral-900 dark:text-neutral font-bold text-2xl leading-none lg:px-10" as="h2">
+          <div class="relative bg-white py-8 ring-1 ring-neutral-200 dark:bg-neutral-900 dark:ring-neutral-800">
+            <DialogTitle class="mb-3 px-6 text-center text-2xl text-neutral-900 font-bold leading-none lg:px-10 dark:text-neutral" as="h2">
               Share Your Feedback
             </DialogTitle>
-            
-            <DialogDescription class="block px-6 text-center text-neutral-700 dark:text-neutral-400 lg:px-10">
+
+            <DialogDescription class="block px-6 text-center text-neutral-700 lg:px-10 dark:text-neutral-400">
               Help us improve the Nimiq Tutorial by sharing your thoughts, reporting bugs, or suggesting new tutorials.
             </DialogDescription>
 
             <div class="mt-3 px-6 lg:px-10">
               <!-- Loading state -->
-              <div v-if="!isWidgetLoaded && !showFallbackForm" class="flex items-center justify-center h-64">
-                <div class="flex items-center space-x-2 text-neutral-500 dark:text-neutral-400">
-                  <div class="i-nimiq:spinner w-5 h-5" />
+              <div v-if="!isWidgetLoaded && !showFallbackForm" class="h-64 flex items-center justify-center">
+                <div class="flex items-center text-neutral-500 space-x-2 dark:text-neutral-400">
+                  <div class="i-nimiq:spinner h-5 w-5" />
                   <span>Loading feedback form...</span>
                 </div>
               </div>
-              
+
               <!-- External Widget -->
               <div
                 id="feedback-widget"
                 ref="widgetContainer"
                 :class="{ block: isWidgetLoaded, hidden: !isWidgetLoaded }"
               />
-              
+
               <!-- Error state -->
-              <div v-if="showFallbackForm && !isWidgetLoaded" class="flex items-center justify-center h-64">
+              <div v-if="showFallbackForm && !isWidgetLoaded" class="h-64 flex items-center justify-center">
                 <div class="text-center space-y-4">
-                  <div class="i-nimiq:warning w-12 h-12 text-yellow-500 mx-auto" />
+                  <div class="i-nimiq:warning mx-auto h-12 w-12 text-yellow-500" />
                   <div class="text-neutral-500 dark:text-neutral-400">
                     Unable to load feedback form
                   </div>
                   <div class="text-sm text-neutral-400 dark:text-neutral-500">
-                    Please try again later or contact us directly in <a href="https://t.me/Nimiq" target="_blank" class="text-blue-600 hover:text-blue-700 underline">Telegram</a>
+                    Please try again later or contact us directly in <a href="https://t.me/Nimiq" target="_blank" class="text-blue-600 underline hover:text-blue-700">Telegram</a>
                   </div>
-                  <button 
+                  <button
+                    class="rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
                     @click="retryWidgetLoad"
-                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                   >
                     Try again
                   </button>
@@ -203,11 +212,11 @@ onUnmounted(() => {
               </div>
             </div>
 
-            <DialogClose 
-              class="absolute right-4 top-4 cursor-pointer hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
+            <DialogClose
+              class="absolute right-4 top-4 cursor-pointer transition-colors hover:text-neutral-600 dark:hover:text-neutral-300"
               aria-label="Close"
             >
-              <div class="i-nimiq:cross w-6 h-6" />
+              <div class="i-nimiq:cross h-6 w-6" />
             </DialogClose>
           </div>
         </DialogContent>
@@ -271,11 +280,11 @@ onUnmounted(() => {
   .lg\:rounded-2xl {
     border-radius: 1rem;
   }
-  
+
   .lg\:max-w-\[500px\] {
     max-width: 500px;
   }
-  
+
   .lg\:px-10 {
     padding-left: 2.5rem;
     padding-right: 2.5rem;

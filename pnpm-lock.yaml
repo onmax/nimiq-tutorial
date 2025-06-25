@@ -75,18 +75,12 @@ importers:
       nimiq-css:
         specifier: 1.0.0-beta.54
         version: 1.0.0-beta.54(postcss@8.5.6)(vite@6.3.5(@types/node@20.19.1)(jiti@2.4.2)(yaml@2.8.0))(vue@3.5.17(typescript@5.8.3))
-      nimiq-icons:
-        specifier: 1.0.0-beta.54
-        version: 1.0.0-beta.54
       prettier-plugin-astro:
         specifier: ^0.14.1
         version: 0.14.1
       typescript:
         specifier: ^5.4.5
         version: 5.8.3
-      unocss:
-        specifier: ^0.59.4
-        version: 0.59.4(postcss@8.5.6)(rollup@4.44.0)(vite@6.3.5(@types/node@20.19.1)(jiti@2.4.2)(yaml@2.8.0))
 
 packages:
 

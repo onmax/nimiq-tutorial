@@ -1,43 +1,42 @@
-import { AccountType, Address, Transaction, BufferUtils, KeyPair, SerialBuffer, TransactionFlag } from '@nimiq/core'
+import { AccountType, Address, BufferUtils, KeyPair, SerialBuffer, Transaction, TransactionFlag } from '@nimiq/core'
 import { Utf8Tools } from '@nimiq/utils/utf8-tools'
 
-import { getFundedWallet } from './lib/wallet.js'
 import { setupConsensus } from './lib/consensus.js'
+import { getFundedWallet } from './lib/wallet.js'
 
 function getCashlinkUrl(network, cashlinkKeyPair, amount, message) {
   const hubDomain = network === 'MainAlbatross'
     ? 'https://hub.nimiq.com'
     : 'https://hub.nimiq-testnet.com'
-  
 
-  let messageBytes = Utf8Tools.stringToUtf8ByteArray(message);
+  const messageBytes = Utf8Tools.stringToUtf8ByteArray(message)
 
   const buf = new SerialBuffer(
-    cashlinkKeyPair.privateKey.serializedSize + // key 
-    8 + // value
-    (messageBytes.byteLength ? 1 : 0) + // message or not message
-    messageBytes.byteLength // message length
-  );
+    cashlinkKeyPair.privateKey.serializedSize // key
+    + 8 // value
+    + (messageBytes.byteLength ? 1 : 0) // message or not message
+    + messageBytes.byteLength, // message length
+  )
 
-  buf.write(cashlinkKeyPair.privateKey.serialize());
-  buf.writeUint64(amount);
+  buf.write(cashlinkKeyPair.privateKey.serialize())
+  buf.writeUint64(amount)
 
   if (messageBytes.byteLength) {
-    buf.writeUint8(messageBytes.byteLength);
-    buf.write(messageBytes);
+    buf.writeUint8(messageBytes.byteLength)
+    buf.write(messageBytes)
   }
 
-  let hashUrl = BufferUtils
+  const hashUrl = BufferUtils
     .toBase64Url(buf)
-    .replace(/\./g, "=") // replace trailing . by = because of URL parsing issues on iPhone.
-    .replace(/[A-Za-z0-9_]{257,}/g, (match) => match.replace(/.{256}/g, "$&~")) // break long words by adding a ~ every 256 characters
+    .replace(/\./g, '=') // replace trailing . by = because of URL parsing issues on iPhone.
+    .replace(/\w{257,}/g, match => match.replace(/.{256}/g, '$&~')) // break long words by adding a ~ every 256 characters
 
   return `${hubDomain}/cashlink/#${hashUrl}`
 }
 
 const CashlinkExtraData = {
   Funding: [0].concat('CASH'.split('').map(c => c.charCodeAt(0) + 63)),
-  Claiming: [0].concat('LINK'.split('').map(c => c.charCodeAt(0) + 63))
+  Claiming: [0].concat('LINK'.split('').map(c => c.charCodeAt(0) + 63)),
 }
 
 async function fundCashlink(client, keyPair, cashlinkAddress, amount) {
@@ -90,7 +89,7 @@ async function setupCashlinkListeners(client, cashlinkAddress, senderAddress) {
         console.log(`└─ Transaction Hash: ${transaction.transactionHash}`)
       }
     },
-    [cashlinkAddress, senderAddress] // Listen to both addresses
+    [cashlinkAddress, senderAddress], // Listen to both addresses
   )
 
   console.log('📡 Monitoring for cashlink funding and claiming...\n')

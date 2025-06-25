@@ -1,5 +1,5 @@
+import { KeyPair, PrivateKey } from '@nimiq/core'
 import { requestFromFaucet } from './faucet.js'
-import { PrivateKey, KeyPair } from '@nimiq/core'
 
 /**
  * Returns a wallet with funds

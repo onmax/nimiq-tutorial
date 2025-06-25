@@ -1,9 +1,8 @@
-import { AccountType, Address, Transaction, BufferUtils, KeyPair, SerialBuffer, TransactionFlag } from '@nimiq/core'
+import { AccountType, Address, BufferUtils, KeyPair, SerialBuffer, Transaction, TransactionFlag } from '@nimiq/core'
 import { Utf8Tools } from '@nimiq/utils/utf8-tools'
 
-import { getFundedWallet } from './lib/wallet.js'
 import { setupConsensus } from './lib/consensus.js'
-
+import { getFundedWallet } from './lib/wallet.js'
 
 function getCashlinkUrl(network, cashlinkKeyPair, amount, message) {
   // TODO: Implement this

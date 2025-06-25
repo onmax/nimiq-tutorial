@@ -1,5 +1,6 @@
 /**
  * Request testnet NIM from the faucet
+ * @param {Nimiq.Client} client - The Nimiq client instance.
  * @param {Nimiq.Address} address - The address to send funds to
  * @returns {Promise<boolean>} - Success status
  */
@@ -36,3 +37,10 @@ export async function requestFromFaucet(client, address) {
     return false
   }
 }
+
+/**
+ * Requests NIM from the testnet faucet.
+ * @param {Nimiq.Client} client - The Nimiq client instance.
+ * @param {string} address - The address to fund.
+ * @returns {Promise<void>}
+ */

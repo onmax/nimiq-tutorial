@@ -1,5 +1,5 @@
-import tutorialkit from '@tutorialkit/astro'
 import vue from '@astrojs/vue'
+import tutorialkit from '@tutorialkit/astro'
 import { defineConfig } from 'astro/config'
 
 export default defineConfig({
