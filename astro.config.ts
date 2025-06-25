@@ -1,4 +1,5 @@
 import tutorialkit from '@tutorialkit/astro'
+import vue from '@astrojs/vue'
 import { defineConfig } from 'astro/config'
 
 export default defineConfig({
@@ -6,11 +7,17 @@ export default defineConfig({
   devToolbar: {
     enabled: false,
   },
+  vite: {
+    define: {
+      __FEEDBACK_DOMAIN__: JSON.stringify('https://nimiq-feedback.je-cf9.workers.dev'),
+    },
+  },
   integrations: [
     tutorialkit({
       components: {
         TopBar: './src/components/CustomTopBar.astro',
       },
     }),
+    vue(),
   ],
 })
