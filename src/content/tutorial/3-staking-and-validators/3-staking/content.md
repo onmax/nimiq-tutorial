@@ -1,3 +1,11 @@
+---
+type: lesson
+title: 'Staking'
+focus: /index.js
+terminal:
+  panels: ['output']
+---
+
 # Staking
 
 We create new lessons in the order requested by the community.
