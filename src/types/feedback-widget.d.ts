@@ -36,7 +36,6 @@ declare global {
   interface Window {
     mountFeedbackWidget: MountFeedbackWidgetFn
   }
-  const __FEEDBACK_DOMAIN__: string
 }
 
 export type MountFeedbackWidgetFn = (selector: string, props?: WidgetProps) => WidgetInstance

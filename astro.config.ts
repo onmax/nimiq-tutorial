@@ -7,15 +7,11 @@ export default defineConfig({
   devToolbar: {
     enabled: false,
   },
-  vite: {
-    define: {
-      __FEEDBACK_DOMAIN__: JSON.stringify('https://nimiq-feedback.je-cf9.workers.dev'),
-    },
-  },
   integrations: [
     tutorialkit({
       components: {
         TopBar: './src/components/CustomTopBar.astro',
+        HeadTags: './src/components/CustomHeadLinks.astro',
       },
     }),
     vue(),

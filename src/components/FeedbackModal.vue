@@ -17,56 +17,9 @@ const isWidgetLoaded = ref(false)
 const widgetInstance = ref<WidgetInstance>()
 const showFallbackForm = ref(false)
 
-let cssLink: HTMLLinkElement
-let script: HTMLScriptElement
-
-const FEEDBACK_DOMAIN = __FEEDBACK_DOMAIN__
-
 const open = ref(false)
 
-// Step 1: Load CSS with preload and fallback
-function loadWidgetCss() {
-  if (document.getElementById('nimiq-feedback-css'))
-    return
-  cssLink = document.createElement('link')
-  cssLink.id = 'nimiq-feedback-css'
-  cssLink.rel = 'preload'
-  cssLink.href = `${FEEDBACK_DOMAIN}/widget.css`
-  cssLink.as = 'style'
-  cssLink.crossOrigin = 'anonymous'
-  cssLink.onload = () => {
-    cssLink.onload = null
-    cssLink.rel = 'stylesheet'
-  }
-  cssLink.onerror = () => {
-    const fallback = document.createElement('link')
-    fallback.rel = 'stylesheet'
-    fallback.href = `${FEEDBACK_DOMAIN}/widget.css`
-    fallback.crossOrigin = 'anonymous'
-    document.head.appendChild(fallback)
-  }
-  document.head.appendChild(cssLink)
-}
-
-// Step 2: Load JS with defer
-function loadWidgetScript() {
-  return new Promise<void>((resolve, reject) => {
-    if (typeof window.mountFeedbackWidget === 'function')
-      return resolve()
-    if (document.getElementById('nimiq-feedback-js'))
-      return resolve()
-    script = document.createElement('script')
-    script.id = 'nimiq-feedback-js'
-    script.src = `${FEEDBACK_DOMAIN}/widget.js`
-    script.crossOrigin = 'anonymous'
-    script.defer = true
-    script.onload = () => resolve()
-    script.onerror = () => reject(new Error('Failed to load feedback widget script'))
-    document.head.appendChild(script)
-  })
-}
-
-// Step 3: Mount the widget after scripts are loaded
+// Step: Mount the widget after scripts are loaded
 async function mountWidget() {
   await nextTick()
   if (!widgetContainer.value)
@@ -75,7 +28,7 @@ async function mountWidget() {
     widgetInstance.value = window.mountFeedbackWidget('#feedback-widget', {
       app: 'nimiq-tutorial',
       lang: 'en',
-      feedbackEndpoint: `${FEEDBACK_DOMAIN}/api/feedback`,
+      feedbackEndpoint: 'https://nimiq-feedback.je-cf9.workers.dev/api/feedback',
       dev: import.meta.env.DEV,
       dark: document.documentElement.getAttribute('data-theme') === 'dark',
     })
@@ -89,10 +42,12 @@ async function mountWidget() {
     widgetInstance.value.communication?.on('form-error', (error) => {
       console.error('Feedback submission error:', error)
     })
+    isWidgetLoaded.value = true
   }
   catch (error) {
     console.error('Failed to initialize feedback widget:', error)
     showFallbackForm.value = true
+    isWidgetLoaded.value = false
   }
 }
 
@@ -106,29 +61,23 @@ function cleanupWidget() {
   }
 }
 
-function retryWidgetLoad() {
-  showFallbackForm.value = false
-  loadWidgetCss()
-  loadWidgetScript()
-    .then(() => isWidgetLoaded.value = true)
-    .catch(() => {
-      isWidgetLoaded.value = false
-      showFallbackForm.value = true
-    })
+function handleRetry() {
+  open.value = false
+  nextTick(() => {
+    open.value = true
+  })
 }
 
 watch(open, async (newValue) => {
   if (newValue) {
     document.body.style.overflow = 'hidden'
     showFallbackForm.value = false
-    loadWidgetCss()
     try {
-      await loadWidgetScript()
-      isWidgetLoaded.value = true
+      await mountWidget()
     }
     catch {
-      isWidgetLoaded.value = false
       showFallbackForm.value = true
+      isWidgetLoaded.value = false
     }
   }
   else {
@@ -139,17 +88,8 @@ watch(open, async (newValue) => {
   }
 }, { immediate: false })
 
-watch([isWidgetLoaded, open], async ([loaded, modalOpen]) => {
-  if (loaded && modalOpen)
-    await mountWidget()
-})
-
 onUnmounted(() => {
   cleanupWidget()
-  if (typeof cssLink !== 'undefined' && document.head.contains(cssLink))
-    document.head.removeChild(cssLink)
-  if (typeof script !== 'undefined' && document.head.contains(script))
-    document.head.removeChild(script)
 })
 </script>
 
@@ -204,7 +144,7 @@ onUnmounted(() => {
                   </div>
                   <button
                     class="rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
-                    @click="retryWidgetLoad"
+                    @click="handleRetry"
                   >
                     Try again
                   </button>
