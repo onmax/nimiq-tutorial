@@ -4,6 +4,7 @@ export default antfu({
   formatters: true,
   unocss: true,
   astro: true,
+  ignores: ['./public/widget.css', './public/widget.js'],
 }, {
   rules: {
     'no-console': 'off',

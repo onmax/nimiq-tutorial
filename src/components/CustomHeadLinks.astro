@@ -1,3 +1,31 @@
+---
+import { SEO } from 'astro-seo'
+---
+
+<SEO
+  title="Nimiq Tutorial: Learn the Nimiq Web Client"
+  description="A hands-on, interactive tutorial for mastering the Nimiq Web Client. Step-by-step lessons, code samples, and instant feedback for web-based Nimiq integration."
+  openGraph={{
+    basic: {
+      title: "Nimiq Tutorial: Learn the Nimiq Web Client",
+      type: "website",
+      image: "/og-image.jpg",
+    }
+  }}
+  twitter={{
+    site: "@nimiq",
+    creator: "@nimiq"
+  }}
+  canonical="https://nimiq-tutorial.maximogarciamtnez.workers.dev/"
+  extend={{
+    meta: [
+      { name: "twitter:image", content: "/og-image.jpg" },
+      { name: "twitter:title", content: "Nimiq Tutorial: Learn the Nimiq Web Client" },
+      { name: "twitter:description", content: "A hands-on, interactive tutorial for mastering the Nimiq Web Client. Step-by-step lessons, code samples, and instant feedback for web-based Nimiq integration." },
+    ],
+  }}
+/>
+
 <slot name="title" />
 <slot name="links" />
 <slot name="meta" />

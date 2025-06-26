@@ -3,7 +3,7 @@ import tutorialkit from '@tutorialkit/astro'
 import { defineConfig } from 'astro/config'
 
 export default defineConfig({
-  site: 'https://tutorial.nimiq.com',
+  site: 'https://nimiq-tutorial.maximogarciamtnez.workers.dev/',
   devToolbar: {
     enabled: false,
   },

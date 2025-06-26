@@ -137,7 +137,7 @@ onUnmounted(() => {
               </div>
 
               <!-- Success state -->
-              <div v-if="showSuccessMessage" class="h-64 flex flex-col items-center justify-center space-y-4 bg-green-50 dark:bg-green-900 px-6 py-4 rounded-xl">
+              <div v-if="showSuccessMessage" class="h-64 flex flex-col items-center justify-center rounded-xl bg-green-50 px-6 py-4 space-y-4 dark:bg-green-900">
                 <div class="i-ph:check-circle h-12 w-12 text-green-500" />
                 <div class="text-lg text-green-600 font-medium dark:text-green-400">
                   Thank you for your feedback!

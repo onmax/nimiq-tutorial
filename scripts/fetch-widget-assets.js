@@ -1,6 +1,7 @@
 // ESM version: Fetch Nimiq Feedback Widget assets using fetch and pathe
 // Usage: node scripts/fetch-widget-assets.js
 
+import { Buffer } from 'node:buffer'
 import fs from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'pathe'
