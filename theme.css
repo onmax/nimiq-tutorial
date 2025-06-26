@@ -2,6 +2,22 @@
 @import './node_modules/nimiq-css/dist/css/colors.css';
 @import './node_modules/nimiq-css/dist/css/fonts.css';
 
+/* Add Mulish Variable Font (local) */
+@font-face {
+  font-family: 'Mulish';
+  src: url('/assets/fonts/Mulish-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+/* Add Fira Code from Google Fonts */
+@font-face {
+  font-family: 'Fira Code';
+  src: url('/assets/fonts/FiraCode-VariableFont_wght.ttf') format('truetype');
+  font-weight: 400 700;
+  font-display: swap;
+}
+
 /* TutorialKit Theme using Nimiq Design System */
 :root,
 :root[data-theme='light'] {
@@ -9,7 +25,7 @@
   --tk-elements-app-textColor: var(--colors-neutral);
   --tk-elements-app-backgroundColor: var(--colors-neutral-0);
   --tk-elements-app-borderColor: var(--colors-neutral-300);
-
+  
   /* Background tokens */
   --tk-background-primary: var(--colors-neutral-0);
   --tk-background-secondary: var(--colors-neutral-200);
@@ -138,6 +154,15 @@
   --tk-terminal-background: var(--colors-darkblue);
 }
 
+.markdown-content :where(h1, h2, h3, h4) {
+  --heading-font-weight: 700;
+}
+
+:where(:not(:where(.nq-raw *, [nq-raw] *))):where(p, span):empty {
+  display: inherit !important;
+}
+
+
 /* Custom styling for Nimiq branding touches */
 .tk-topbar {
   background: var(--colors-neutral-gradient);
@@ -178,6 +203,7 @@
 :root {
   font-family:
     'Muli',
+    'Mulish'
     'Inter',
     system-ui,
     -apple-system,
@@ -190,4 +216,14 @@ div[role='separator']:hover::after {
   :root[data-theme='dark'] & {
     background-color: color-mix(in srgb, var(--colors-neutral-0) 8%, transparent);
   }
+}
+
+.cm-editor * {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.8rem;
+}
+
+.terminal * {
+  letter-spacing: normal !important;
+  font-family: 'Fira Code', monospace;
 }

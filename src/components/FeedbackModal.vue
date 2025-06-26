@@ -3,7 +3,6 @@ import type { WidgetInstance } from '../types/feedback-widget'
 import {
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogOverlay,
   DialogPortal,
   DialogRoot,
@@ -16,6 +15,7 @@ const widgetContainer = ref<HTMLDivElement>()
 const isWidgetLoaded = ref(false)
 const widgetInstance = ref<WidgetInstance>()
 const showFallbackForm = ref(false)
+const showSuccessMessage = ref(false)
 
 const open = ref(false)
 
@@ -37,7 +37,11 @@ async function mountWidget() {
     })
     widgetInstance.value.communication?.on('form-submitted', (data) => {
       console.log('Feedback submitted successfully:', data)
-      setTimeout(() => open.value = false, 2000)
+      showSuccessMessage.value = true
+      setTimeout(() => {
+        showSuccessMessage.value = false
+        open.value = false
+      }, 2000)
     })
     widgetInstance.value.communication?.on('form-error', (error) => {
       console.error('Feedback submission error:', error)
@@ -72,6 +76,7 @@ watch(open, async (newValue) => {
   if (newValue) {
     document.body.style.overflow = 'hidden'
     showFallbackForm.value = false
+    showSuccessMessage.value = false
     try {
       await mountWidget()
     }
@@ -108,20 +113,24 @@ onUnmounted(() => {
           @open-auto-focus.prevent
         >
           <div class="relative bg-white py-8 ring-1 ring-neutral-200 dark:bg-neutral-900 dark:ring-neutral-800">
-            <DialogTitle class="mb-3 px-6 text-center text-2xl text-neutral-900 font-bold leading-none lg:px-10 dark:text-neutral" as="h2">
+            <DialogTitle class="sr-only mb-3 px-6 text-center text-2xl text-neutral-900 font-bold leading-none lg:px-10 dark:text-neutral" as="h2">
               Share Your Feedback
             </DialogTitle>
 
-            <DialogDescription class="block px-6 text-center text-neutral-700 lg:px-10 dark:text-neutral-400">
-              Help us improve the Nimiq Tutorial by sharing your thoughts, reporting bugs, or suggesting new tutorials.
-            </DialogDescription>
-
             <div class="mt-3 px-6 lg:px-10">
               <!-- Loading state -->
-              <div v-if="!isWidgetLoaded && !showFallbackForm" class="h-64 flex items-center justify-center">
+              <div v-if="!isWidgetLoaded && !showFallbackForm && !showSuccessMessage" class="h-64 flex items-center justify-center">
                 <div class="flex items-center text-neutral-500 space-x-2 dark:text-neutral-400">
-                  <div class="i-nimiq:spinner h-5 w-5" />
+                  <div class="i-ph:spinner h-5 w-5" />
                   <span>Loading feedback form...</span>
+                </div>
+              </div>
+
+              <!-- Success state -->
+              <div v-if="showSuccessMessage" class="h-64 flex flex-col items-center justify-center space-y-4">
+                <div class="i-ph:check-circle h-12 w-12 text-green-500" />
+                <div class="text-lg text-green-600 font-medium dark:text-green-400">
+                  Thank you for your feedback!
                 </div>
               </div>
 
@@ -129,13 +138,13 @@ onUnmounted(() => {
               <div
                 id="feedback-widget"
                 ref="widgetContainer"
-                :class="{ block: isWidgetLoaded, hidden: !isWidgetLoaded }"
+                :class="{ block: isWidgetLoaded && !showSuccessMessage, hidden: !isWidgetLoaded || showSuccessMessage }"
               />
 
               <!-- Error state -->
               <div v-if="showFallbackForm && !isWidgetLoaded" class="h-64 flex items-center justify-center">
                 <div class="text-center space-y-4">
-                  <div class="i-nimiq:warning mx-auto h-12 w-12 text-yellow-500" />
+                  <div class="i-ph:warning-circle mx-auto h-12 w-12 text-yellow-500" />
                   <div class="text-neutral-500 dark:text-neutral-400">
                     Unable to load feedback form
                   </div>
@@ -156,7 +165,7 @@ onUnmounted(() => {
               class="absolute right-4 top-4 cursor-pointer transition-colors hover:text-neutral-600 dark:hover:text-neutral-300"
               aria-label="Close"
             >
-              <div class="i-nimiq:cross h-6 w-6" />
+              <div class="i-ph:x h-6 w-6" />
             </DialogClose>
           </div>
         </DialogContent>
