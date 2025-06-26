@@ -19,6 +19,8 @@ const showSuccessMessage = ref(false)
 
 const open = ref(false)
 
+let cleanupTimeout: ReturnType<typeof setTimeout> | null = null
+
 // Step: Mount the widget after scripts are loaded
 async function mountWidget() {
   await nextTick()
@@ -74,6 +76,10 @@ function handleRetry() {
 
 watch(open, async (newValue) => {
   if (newValue) {
+    if (cleanupTimeout) {
+      clearTimeout(cleanupTimeout)
+      cleanupTimeout = null
+    }
     document.body.style.overflow = 'hidden'
     showFallbackForm.value = false
     showSuccessMessage.value = false
@@ -87,9 +93,13 @@ watch(open, async (newValue) => {
   }
   else {
     document.body.style.overflow = ''
-    cleanupWidget()
-    showFallbackForm.value = false
-    isWidgetLoaded.value = false
+    // Delay cleanup by 500ms
+    cleanupTimeout = setTimeout(() => {
+      cleanupWidget()
+      showFallbackForm.value = false
+      isWidgetLoaded.value = false
+      cleanupTimeout = null
+    }, 500)
   }
 }, { immediate: false })
 
@@ -127,7 +137,7 @@ onUnmounted(() => {
               </div>
 
               <!-- Success state -->
-              <div v-if="showSuccessMessage" class="h-64 flex flex-col items-center justify-center space-y-4">
+              <div v-if="showSuccessMessage" class="h-64 flex flex-col items-center justify-center space-y-4 bg-green-50 dark:bg-green-900 px-6 py-4 rounded-xl">
                 <div class="i-ph:check-circle h-12 w-12 text-green-500" />
                 <div class="text-lg text-green-600 font-medium dark:text-green-400">
                   Thank you for your feedback!

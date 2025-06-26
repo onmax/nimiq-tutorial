@@ -6,11 +6,11 @@ terminal:
   panels: ['terminal']
 ---
 
-# Welcome to Nimiq Web Tutorial! 🚀 <div class="i-nimiq:logos-nimiq" />
+# Welcome to Nimiq Web Tutorial!
 
 **Nimiq** is a browser-native blockchain that lets you build decentralized applications without complex setup. No downloads, no installations - just JavaScript that connects directly to the blockchain!
 
-## What Makes Nimiq Special? 🌟
+## What Makes Nimiq Special?
 
 Most blockchains require you to either:
 
