@@ -279,3 +279,19 @@ const message = 'Happy Birthday! 🥳'
 ```
 
 Now, when you open the Nimiq Hub, you will see a custom style for your Cashlink!
+
+---
+
+## Want to Create Cashlinks in Bulk?
+
+Ready to take your cashlink skills to the next level? For advanced use cases like creating hundreds of cashlinks for events, marketing campaigns, or bulk payments, check out the **Nimiq Cashlink Generator** - a powerful command-line tool that can:
+
+- 🔄 Generate and manage cashlinks in bulk
+- 📊 Create detailed statistics on cashlink usage
+- 🎨 Generate QR codes and printable vouchers
+- 💰 Fund and claim multiple cashlinks efficiently
+- 📈 Track cashlink performance and analytics
+
+👉 **[Explore the Nimiq Cashlink Generator](https://github.com/nimiq/cashlink-generator)**
+
+This tool is perfect for businesses, developers, and anyone who needs to create cashlinks at scale. Go ahead and explore the advanced features that can help you build sophisticated cashlink campaigns!
